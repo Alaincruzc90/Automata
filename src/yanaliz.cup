@@ -1,0 +1,676 @@
+/*
+  File Name: yanaliz.cup
+  To Create: > java java_cup.Main < yanaliz.cup
+*/
+   
+   
+/* ----------------------Preliminary Declarations Section--------------------*/
+
+import java_cup.runtime.*;
+import application.classobject.*;
+import application.method.*;
+import application.enums.*;
+import application.assignment.*;
+import application.assignment.math.*;
+import application.variables.*;
+import application.condition.*;
+import application.component.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
+import java.util.LinkedList;
+   
+/* Parser code to change the way the parser reports errors (include
+   line and column number of the error). */
+parser code {:
+    
+    public void report_error(String message, Object info) {
+   
+        StringBuilder m = new StringBuilder("Error");
+   
+        if (info instanceof java_cup.runtime.Symbol) {
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+   
+            if (s.left >= 0) {                
+                m.append(" in line "+(s.left+1));   
+                if (s.right >= 0)                    
+                    m.append(", column "+(s.right+1));
+            }
+        }
+   
+        m.append(" : "+message);
+        System.err.println(m);
+    }
+   
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+    }
+:};
+   
+
+   
+/* ------------Declaration of Terminals and Non Terminals Section----------- */
+
+/* ------------Terminals Section----------- */
+   
+/* Data types */
+terminal BOOLEAN, CHAR, DOUBLE, FLOAT, INT, STRING;
+
+/* Keywords */
+terminal ARRAY, CALL, DECREASE, DEFINE, ELSE, EMPTY, FOR, FUNC, IF, INCREASE, INSERT, INTERFACE, LENGTH,
+LIST, PARAMS, POS, PRINT, PRIVATE, PROC, PUBLIC, READ, RETURN, SIZE, TO, VAR, VOID, WHILE, WITH, CLASS_DEF;
+
+/* Mathematical symbols */ 
+terminal SUM, SUBTRACTION, DIVISION, MULTIPLICATION;
+
+/* Conditionals */
+terminal EQUALS, GREATER_THAN, GREATER_THAN_EQUALS, SMALLER_THAN, SMALLER_THAN_EQUALS, NOT, FALSE, THEN, TRUE, AND, OR;
+
+/* Blocks and Parenthesis */ 
+terminal CODE_BLOCK_START, CODE_BLOCK_END, PARENTHESIS_RIGHT, PARENTHESIS_LEFT, PARENTHESIS_SQRIGHT, PARENTHESIS_SQLEFT;
+
+/* Special Symbols */ 
+terminal ASSIGNMENT, EOL, COMMA, DESTROYER_IDENTIFY, EXIT;
+
+/* Symbols with Values */
+terminal Float NUM;
+terminal String QUOTATION_MARKS, SIMPLE_QUOTATION, ERRORS, IDENTIFIER;
+
+/* ----------------------Non Terminals Section---------------------- */   
+
+/* Classes definition */
+non terminal ClassObject class_def;
+
+/* Methods and variable blocks */
+
+non terminal Object expr_part, ints;
+
+non terminal MethodBlock method_block;
+
+non terminal Set<VarStructure> var_block, params;
+
+non terminal MethodBlock method_inst;
+
+non terminal List<Component> inst_block;
+
+non terminal ClassObjectBlock expr_list;
+
+non terminal Method method;
+
+non terminal Method proc;
+
+non terminal Method func;
+
+/* Variable definition */
+non terminal Object assig_exp;
+
+non terminal VarType var_type;
+
+non terminal Set<VarStructure> var_def;
+
+non terminal VarAssignment var_assig;
+
+non terminal VarStructure array_def;
+
+/* Method Instructions */
+non terminal Component if, for, while, return, io_oper, else;
+
+/* Conditionals */
+non terminal Condition conditional;
+
+non terminal ComparatorType cond_type;
+
+/* Mathematical operations */
+
+non terminal Object term;
+
+non terminal Assignment math_expr, factor, math_part;
+
+/* Arrays */
+non terminal Object array_size, num_iden;
+
+/* Values */
+non terminal Object num, quote_marks, simple_quote;
+
+/* JEFF */
+non terminal Object math_sym, index;
+
+non terminal ValueAssignment<Boolean> tof;
+
+non terminal Assignment call, return_exp;
+
+
+/* ----------------------------Grammar Section-------------------- */
+
+class_def ::= 	PUBLIC CLASS_DEF IDENTIFIER:s CODE_BLOCK_START expr_list:o CODE_BLOCK_END
+		{: RESULT = new ClassObject(o.getGlobalVariables(), o.getMethods(), s);
+		   RESULT.print();:}
+		|
+		PUBLIC CLASS_DEF IDENTIFIER:s CODE_BLOCK_START CODE_BLOCK_END
+		{: RESULT = new ClassObject(null, null, s); :}
+		;
+
+      
+expr_list ::= 	expr_list:c expr_part:o
+                {:
+                    if (o instanceof Method) {
+                        c.getMethods().add((Method) o);
+                    } else {
+                        RESULT.setGlobalVariables((Set<VarStructure>) o);
+                    }
+                    RESULT = c;
+                :}
+                |
+                expr_part:o
+                {:
+                RESULT = new ClassObjectBlock();
+                if (o instanceof Method) {
+                    RESULT.getMethods().add((Method)o);
+                } else {
+                    RESULT.setGlobalVariables((Set<VarStructure>) o);
+                }
+                :}
+		;
+
+expr_part ::=
+        method:o
+		{: RESULT = o; :}
+		|
+		var_block:v
+        {: RESULT = v; :}
+        |
+		DESTROYER_IDENTIFY   
+		{: System.out.println("Identificador del destructor"); :}   
+	   	| 
+		ERRORS:s			      
+		{: System.out.println("->Error léxico: " + s); :}
+		|
+		EXIT
+		{: System.out.println("-> Fin del programa"); :}
+		;
+
+
+method  ::= func:f
+            {: RESULT = f; :}
+            |
+            proc:p
+            {: RESULT = p;:}
+            ;
+
+
+func ::=	FUNC IDENTIFIER:i PARAMS params:p RETURN var_type method_block:v
+		{: RESULT = new Func(i, p, v.getLocalVariables(), v.getComponents(), MethodType.FUNC, null); :}
+		;
+
+proc ::=	PROC IDENTIFIER:i PARAMS params:p method_block:v
+		{: RESULT = new Method(i, p, v.getLocalVariables(), v.getComponents(), MethodType.PROC, null); :}
+		;
+
+params ::=	var_type:s IDENTIFIER:i COMMA params:c
+		{:
+		c.add(new VarDeclaration(DeclarationType.DECLARATION, i, s));
+		RESULT = c;
+		:}
+		|
+		var_type:s IDENTIFIER:i
+		{:
+		RESULT = new HashSet<>();
+		RESULT.add(new VarDeclaration(DeclarationType.DECLARATION, i, s));
+		:}
+		|
+		EMPTY
+		{:
+		RESULT = new HashSet<>();
+		:}
+		;
+
+method_block ::=
+        CODE_BLOCK_START method_inst:m CODE_BLOCK_END
+		{: RESULT = m; :}
+		;
+
+method_inst ::=
+        var_block:v inst_block:i
+        {: RESULT = new MethodBlock(v, i); :}
+		|
+		var_block:v
+		{: RESULT = new MethodBlock(v, null); :}
+		|
+		inst_block:i
+		{: RESULT = new MethodBlock(null, i); :}
+		|
+		{: RESULT = new MethodBlock(null, null); :}
+		;
+
+var_block ::=	DEFINE VAR CODE_BLOCK_START var_def:c CODE_BLOCK_END
+		{: RESULT = c; :}
+		;
+
+inst_block ::=	for:s inst_block:c
+		{:
+		c.add(s);
+		RESULT = c;
+		:}
+		|
+		for:s
+		{:
+		RESULT = new LinkedList<>();
+		RESULT.add(s);
+		:}
+		|
+		if:s inst_block:c
+		{:
+		c.add(s);
+        RESULT = c;
+		:}
+		|
+		if:s
+		{:
+		RESULT = new LinkedList<>();
+        RESULT.add(s);
+		:}
+		|
+		while:s inst_block:c
+		{:
+		c.add(s);
+        RESULT = c;
+		:}
+		|
+		while:s
+		{:
+		RESULT = new LinkedList<>();
+        RESULT.add(s);
+		:}
+		|
+		var_assig:s EOL inst_block:c
+		{:
+		c.add(new VarAssignmentComponent(ComponentType.ASSIGNMENT, s.getIdentifierName(), s.getAssignment()));
+		RESULT = c;
+		:}
+		|
+		var_assig:s EOL
+		{:
+		 RESULT = new LinkedList<>();
+         RESULT.add(new VarAssignmentComponent(ComponentType.ASSIGNMENT, s.getIdentifierName(), s.getAssignment()));
+		 :}
+		|
+		return:s
+		{:
+		RESULT = new LinkedList<>();
+        RESULT.add(s);
+		:}
+		|
+		call:s
+		{:
+		RESULT = new LinkedList<>();
+        RESULT.add((Component)s);
+		:}
+		|
+		io_oper:s inst_block:c
+		{:
+		c.add(s);
+        RESULT = c;
+		:}
+		|
+		io_oper:s
+		{:
+		RESULT = new LinkedList<>();
+        RESULT.add(s);
+		:}
+		;
+
+
+for ::=
+        FOR term:n1 TO term:n2 INCREASE term:n3 CODE_BLOCK_START inst_block:i CODE_BLOCK_END
+		{:
+		Assignment actual, maxValue, stripe;
+
+		if(n1 instanceof Float) {
+		    actual = new ValueAssignment<Integer>(Math.round((Float)n1));
+		} else {
+		    actual = (IdentifierAssignment)n1;
+		}
+
+		if(n2 instanceof Float) {
+            maxValue = new ValueAssignment<Integer>(Math.round((Float)n2));
+        } else {
+            maxValue = (IdentifierAssignment)n2;
+        }
+
+        if(n3 instanceof Float) {
+            stripe = new ValueAssignment<Integer>(Math.round((Float)n3));
+        } else {
+            stripe = (IdentifierAssignment)n3;
+        }
+
+		RESULT = new For(ComponentType.FOR, i, maxValue, stripe, actual);
+		:}
+		|
+		FOR term:n1 TO term:n2 INCREASE term:n3 CODE_BLOCK_START CODE_BLOCK_END
+		{:
+
+		Assignment actual, maxValue, stripe;
+
+        if(n1 instanceof Float) {
+            actual = new ValueAssignment<Integer>(Math.round((Float)n1));
+        } else {
+            actual = (IdentifierAssignment)n1;
+        }
+
+        if(n2 instanceof Float) {
+               maxValue = new ValueAssignment<Integer>(Math.round((Float)n2));
+        } else {
+               maxValue = (IdentifierAssignment)n2;
+        }
+
+        if(n3 instanceof Float) {
+              stripe = new ValueAssignment<Integer>(Math.round((Float)n3));
+        } else {
+              stripe = (IdentifierAssignment)n3;
+        }
+
+        RESULT = new For(ComponentType.FOR, null, maxValue, stripe, actual);
+        :}
+		;
+
+
+if ::=		IF conditional:c THEN CODE_BLOCK_START inst_block:i CODE_BLOCK_END else:e
+		{: RESULT = new If(ComponentType.IF, i, c, e); :}
+		|
+		IF conditional:c THEN CODE_BLOCK_START inst_block:i CODE_BLOCK_END
+		{: RESULT = new If(ComponentType.IF, i, c, null); :}
+		|
+		IF conditional:c THEN CODE_BLOCK_START CODE_BLOCK_END else:e
+		{: RESULT = new If(ComponentType.IF, null, c, e); :}
+		|
+		IF conditional:c THEN CODE_BLOCK_START CODE_BLOCK_END
+		{: RESULT = new If(ComponentType.IF, null, c, null); :}
+		;
+
+else ::=	ELSE CODE_BLOCK_START inst_block:s CODE_BLOCK_END
+		{: RESULT = new Else(ComponentType.ELSE, s); :}
+		|
+		ELSE CODE_BLOCK_START CODE_BLOCK_END
+		{: RESULT = new Else(ComponentType.ELSE, null); :}
+		;
+
+while ::=	WHILE conditional:c CODE_BLOCK_START inst_block:s CODE_BLOCK_END
+		{: RESULT = new While(ComponentType.WHILE, s, c); :}
+		|
+		WHILE conditional:c CODE_BLOCK_START CODE_BLOCK_END
+		{: RESULT = new While(ComponentType.WHILE, null, c); :}
+		;
+
+conditional ::=
+        math_expr:s cond_type:c math_expr:v
+		{: RESULT = new Condition(s, v, c); :}
+		|
+		IDENTIFIER:i POS index cond_type:c math_expr:v
+		{: RESULT = new Condition(new IdentifierAssignment(i), v, c); :}
+		|
+		IDENTIFIER:i
+		{: RESULT = new Condition(new IdentifierAssignment(i), new ValueAssignment<Boolean>(true), ComparatorType.EQUALS); :}
+		|
+		TRUE
+		{: RESULT = new Condition(new ValueAssignment<Boolean>(true), new ValueAssignment<Boolean>(true), ComparatorType.EQUALS); :}
+		|
+		FALSE
+		{: RESULT = new Condition(new ValueAssignment<Boolean>(false), new ValueAssignment<Boolean>(false), ComparatorType.EQUALS); :}
+		;
+
+cond_type ::=
+        EQUALS
+        {: RESULT = ComparatorType.EQUALS; :}
+		|
+		NOT EQUALS
+		{: RESULT = ComparatorType.NOT_EQUALS; :}
+		|
+		GREATER_THAN
+		{: RESULT = ComparatorType.GREATER_THAN; :}
+		|
+		SMALLER_THAN
+		{: RESULT = ComparatorType.LESS_THAN; :}
+		|
+		GREATER_THAN_EQUALS
+		{: RESULT = ComparatorType.GREATER_THAN_EQUALS; :}
+		|
+		SMALLER_THAN_EQUALS
+		{: RESULT = ComparatorType.LESS_THAN_EQUALS; :}
+		;
+
+
+var_def ::=	var_type:s var_assig:v EOL var_def:c
+		{:
+		c.add(new VarDeclarationAssignment(DeclarationType.DECLARATION_ASSIGNMENT, v.getIdentifierName(), s, v));
+		RESULT = c;
+		:}
+		|
+		var_type:s var_assig:v EOL
+		{:
+		RESULT = new HashSet<VarStructure>();
+        RESULT.add(new VarDeclarationAssignment(DeclarationType.DECLARATION_ASSIGNMENT, v.getIdentifierName(), s, v));
+		:}
+		|
+		var_type:s IDENTIFIER:i EOL var_def:c
+		{:
+		 c.add(new VarDeclaration(DeclarationType.DECLARATION, i, s));
+         RESULT = c;
+		 :}
+		|
+		var_type:s IDENTIFIER:i EOL
+		{:
+		 RESULT = new HashSet<VarStructure>();
+		 RESULT.add(new VarDeclaration(DeclarationType.DECLARATION, i, s));
+		 :}
+		|
+		array_def:s var_def:c
+		{:
+		c.add(s);
+		RESULT = c;
+		:}
+		|
+		var_assig:s EOL var_def:c
+		{:
+		 c.add(new VarAssignment(DeclarationType.ASSIGNMENT, s.getIdentifierName(), s));
+		 RESULT = c;
+		 :}
+		|
+		array_def:s
+		{:
+		RESULT = new HashSet<VarStructure>();
+		RESULT.add(s);
+		:}
+		|
+		var_assig:s EOL
+		{:
+		RESULT = new HashSet<VarStructure>();
+	    RESULT.add(new VarAssignment(DeclarationType.ASSIGNMENT, s.getIdentifierName(), s));
+		:}
+		;
+
+var_assig ::=	IDENTIFIER:i ASSIGNMENT math_expr:s
+		{: RESULT = new VarAssignment(DeclarationType.ASSIGNMENT, i, s); :}
+		|
+		IDENTIFIER:i POS index ASSIGNMENT tof:s
+		{: RESULT = new VarAssignment(DeclarationType.ASSIGNMENT, i, s); :}
+		|
+		IDENTIFIER:i INSERT index
+		{: RESULT = new VarAssignment(DeclarationType.ASSIGNMENT, i, new ValueAssignment<String>("Array:insert")); :}
+		;
+
+tof ::=		TRUE
+            {: RESULT = new ValueAssignment<Boolean>(true); :}
+            |
+            FALSE
+            {: RESULT = new ValueAssignment<Boolean>(false); :}
+		;
+
+index ::=	num | IDENTIFIER math_sym num;
+
+array_def ::=	ARRAY var_type:v IDENTIFIER:i array_size:a EOL
+		{: RESULT = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.ARRAY); :}
+		|
+		ARRAY var_type:v IDENTIFIER:i EOL
+		{: RESULT = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.ARRAY); :}
+		;
+
+math_expr ::=	math_part:s SUM math_expr:v
+		{: RESULT = new Sum(s, v); :}
+		|
+		math_part:s SUBTRACTION math_expr:v
+		{: RESULT = new Minus(s, v); :}
+		|
+		math_part:s
+		{: RESULT = s; :}
+		;
+
+math_part ::=	PARENTHESIS_LEFT math_expr:s PARENTHESIS_RIGHT
+		{: RESULT = new MathAux(); :}
+		|
+		term:s
+		{:
+		if(s instanceof IdentifierAssignment) {
+		    RESULT = (IdentifierAssignment)s;
+		} else if(s instanceof String) {
+		    RESULT = new ValueAssignment<String>((String)s);
+		} else if(s instanceof Double) {
+		    RESULT = new ValueAssignment<Double>((Double)s);
+		}
+		:}
+		|
+		factor:f
+		{: RESULT = f; :}
+		;
+
+
+return ::=	RETURN return_exp:s EOL
+		{:
+            RESULT = new Return(ComponentType.RETURN, s);
+		:}
+		;
+
+call ::=	CALL IDENTIFIER:s WITH math_part:m
+		{:
+		    RESULT = new Call(ComponentType.CALL, m, s);
+		:}
+		;
+
+return_exp ::=
+        math_part:s
+        {: RESULT = s; :}
+		|
+		call:s
+		{: RESULT = s; :}
+		|
+		call:s SUM return_exp:v
+		{: RESULT = new Sum(s, v); :}
+		|
+		call:s SUBTRACTION return_exp:v
+		{: RESULT = new Minus(s, v); :}
+		;
+
+
+factor ::=	math_part:s MULTIPLICATION num:v
+		{:
+		 if(!(v instanceof Double)) throw new Exception("Can't parse " + v + " to Double.");
+         		RESULT =  new Mul((Assignment)s, new ValueAssignment<Double>((Double)v));
+		 :}
+		|
+		math_part:s DIVISION num:v
+		{:
+		if(!(v instanceof Double)) throw new Exception("Can't parse " + v + " to Double.");
+		RESULT =  new Div((Assignment)s, new ValueAssignment<Double>((Double)v));
+		:}
+		;
+
+
+io_oper ::=	PRINT term:s EOL
+		{:
+		    if(s instanceof String) {
+		        ValueAssignment<String> value = new ValueAssignment<String>((String) s);
+		        RESULT = new Print(ComponentType.PRINT, value);
+		    } else if(s instanceof IdentifierAssignment) {
+		        RESULT = new Print(ComponentType.PRINT, (IdentifierAssignment)s);
+		    } else {
+		        RESULT = new Print(ComponentType.PRINT, new ValueAssignment<String>((String) s));
+		    }
+		:}
+		|
+		READ IDENTIFIER:s EOL
+		{: RESULT =  new Read(ComponentType.READ, new IdentifierAssignment(s)); :}
+		;
+
+
+term ::= num:s
+		{: RESULT = s; :}
+		|
+		quote_marks:s
+		{: RESULT = s; :}
+		|
+		simple_quote:s
+		{: RESULT = s; :}
+		|
+		IDENTIFIER:s
+		{: RESULT = new IdentifierAssignment(s.toString()); :}
+		|
+		tof		
+		;
+
+array_size ::=	SIZE num_iden:s
+		{: RESULT = s; :}
+		|
+		SIZE IDENTIFIER:s
+		{: RESULT = s; :}
+		;
+
+num_iden ::=	num:s
+		{: RESULT = s; :}
+		;
+
+var_type ::=	BOOLEAN 
+		{: RESULT = VarType.BOOLEAN; :}
+		|
+		CHAR 
+		{: RESULT = VarType.CHAR; :}
+		|
+		DOUBLE 
+		{: RESULT = VarType.DOUBLE; :}
+		|
+		FLOAT 
+		{: RESULT = VarType.FLOAT; :}
+		|
+		INT 
+		{: RESULT = VarType.INT; :}
+		|
+		STRING 
+		{: RESULT = VarType.STRING; :}
+		|
+		ARRAY 
+		{: RESULT = VarType.ARRAY; :}
+		|
+		LIST 
+		{: RESULT = VarType.LIST; :}
+		;
+
+math_sym ::= SUM
+		|
+		SUBTRACTION
+		|
+		DIVISION
+		|
+		MULTIPLICATION
+		;
+
+num ::= 	NUM:n 
+		{: RESULT = n; :}
+		;
+
+quote_marks ::=	QUOTATION_MARKS:s
+		{: RESULT = s; :}
+		;
+
+simple_quote ::=SIMPLE_QUOTATION:s
+		{: RESULT = s; :}
+		;
+
+

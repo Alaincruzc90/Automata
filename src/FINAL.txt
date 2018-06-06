@@ -1,0 +1,94 @@
+public class ProyectoAutomatas {
+
+define var
+  {
+  // arreglo de booleanos de tamaño n y se inicializa en true
+      Array boolean numeric_table size n;
+      int index = 1;
+  // arreglo dinámico para guardar los números primos y se recorre el arreglo con dos ciclos anidados
+      Array int prime_numbers;
+      index = 1;  // se reinicia en uno
+      int i = 0;  // se define e inicializa un entero para el for dentro del while
+  }
+// Criba de Eratóstenes 
+func eratosthenes params int n return List
+{
+ 
+  define var 
+  {
+  // arreglo de booleanos de tamaño n y se inicializa en true
+      Array boolean numeric_table size n;   
+      int index = 1;  
+  // arreglo dinámico para guardar los números primos y se recorre el arreglo con dos ciclos anidados
+      Array int prime_numbers;
+      index = 1;  // se reinicia en uno
+      int i = 0;  // se define e inicializa un entero para el for dentro del while
+ 
+  }
+ 
+  for index to n  increase 1  // se cambia a true a partir de índice 2
+  {
+      numeric_table pos index + 1 = true;
+  }  
+ 
+ 
+  while index < n    // recorre todo el arreglo 
+  {
+        // si el número no ha sido marcado se agrega a la lista de números primos
+         if numeric_table pos index + 1 equals true then   
+         {
+                 prime_numbers insert index + 1;
+         }
+ 
+          i = index;
+         // marca todos los múltiplos de cada índice
+         for  i to n increase index     
+         {
+                 numeric_table pos i + 1 = false;
+         }
+         index = index + 1; // se aumenta el contador
+   }
+   
+}
+
+// Imprimir triángulo.
+proc drawTriangle params empty
+{
+	//Se definen las variables
+	define var {
+		char c;
+		int n;
+		int numCharacter = 1;
+	}
+
+	//Se solicita al usuario un caracter y un número
+	print	c;
+	read c; //Esto lo guarda en la variable c, se lee un tipo char. 
+	print	"Digite un número";
+	read n;
+
+	//Se dibuja el triángulo rectangulo
+	for numCharacter to n increase 1
+	{
+		for 1 to numCharacter increase 1 
+		{
+			print c;
+		}
+		print "\n";
+	}
+}
+
+// Sucesión de fibonacci.
+func fibonacci params int n return int
+{ 
+     if n < 2 then  //Condición de parada
+     { 
+     } 
+    else  //Se obtienen los demás números de la sucesión
+    {
+          //Se llama a fibonacci con n-1 y n-2 de la siguiente forma: 
+          return call fibonacci with (n - 1) + call fibonacci with (n - 2);
+    }
+}
+
+}
