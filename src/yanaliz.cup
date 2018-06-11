@@ -144,6 +144,7 @@ non terminal Assignment call, return_exp;
 
 class_def ::= 	PUBLIC CLASS_DEF IDENTIFIER:s CODE_BLOCK_START expr_list:o CODE_BLOCK_END
 		{: RESULT = new ClassObject(o.getGlobalVariables(), o.getMethods(), s);
+		   RESULT.fillSymbolTable();
 		   RESULT.print();:}
 		|
 		PUBLIC CLASS_DEF IDENTIFIER:s CODE_BLOCK_START CODE_BLOCK_END
@@ -198,8 +199,8 @@ method  ::= func:f
             ;
 
 
-func ::=	FUNC IDENTIFIER:i PARAMS params:p RETURN var_type method_block:v
-		{: RESULT = new Func(i, p, v.getLocalVariables(), v.getComponents(), MethodType.FUNC, null); :}
+func ::=	FUNC IDENTIFIER:i PARAMS params:p RETURN var_type:vt method_block:v
+		{: RESULT = new Func(i, p, v.getLocalVariables(), v.getComponents(), MethodType.FUNC, null, vt); :}
 		;
 
 proc ::=	PROC IDENTIFIER:i PARAMS params:p method_block:v

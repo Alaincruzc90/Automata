@@ -516,6 +516,7 @@ class CUP$parser$actions {
 		int oright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		ClassObjectBlock o = (ClassObjectBlock)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 RESULT = new ClassObject(o.getGlobalVariables(), o.getMethods(), s);
+		   RESULT.fillSymbolTable();
 		   RESULT.print();
               CUP$parser$result = parser.getSymbolFactory().newSymbol("class_def",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -676,10 +677,13 @@ class CUP$parser$actions {
 		int pleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int pright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Set<VarStructure> p = (Set<VarStructure>)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int vtleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int vtright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		VarType vt = (VarType)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		MethodBlock v = (MethodBlock)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Func(i, p, v.getLocalVariables(), v.getComponents(), MethodType.FUNC, null); 
+		 RESULT = new Func(i, p, v.getLocalVariables(), v.getComponents(), MethodType.FUNC, null, vt); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("func",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

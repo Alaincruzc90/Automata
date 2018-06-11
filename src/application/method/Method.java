@@ -3,8 +3,13 @@ package application.method;
 import application.classobject.ClassObject;
 import application.component.Component;
 import application.enums.MethodType;
+import application.symboltable.SymbolTable;
+import application.symboltable.Variable;
+import application.variables.VarDeclaration;
+import application.variables.VarDeclarationAssignment;
 import application.variables.VarStructure;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -20,8 +25,8 @@ public class Method {
 
     public Method() {
         this.identifier = null;
-        this.parameters = null;
-        this.localVariables = null;
+        this.parameters = new LinkedHashSet<>();
+        this.localVariables = new LinkedHashSet<>();
         this.components = null;
         this.methodType = null;
         this.father = null;
@@ -34,8 +39,16 @@ public class Method {
                   MethodType methodType,
                   ClassObject father) {
         this.identifier = identifier;
-        this.parameters = parameters;
-        this.localVariables = localVariables;
+        if(parameters == null) {
+            this.parameters = new LinkedHashSet<>();
+        } else {
+            this.parameters = parameters;
+        }
+        if(localVariables == null) {
+            this.localVariables = new LinkedHashSet<>();
+        } else {
+            this.localVariables = localVariables;
+        }
         this.components = components;
         this.methodType = methodType;
         this.father = father;
@@ -103,6 +116,23 @@ public class Method {
             for (Component component:
                     components) {
                 component.print(2);
+            }
+        }
+    }
+
+    public void fillLocalSymbols(SymbolTable symbolTable) {
+
+        for(VarStructure var : localVariables) {
+            if(var instanceof VarDeclaration) {
+                symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
+            } else if (var instanceof VarDeclarationAssignment) {
+                symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
+            }
+        }
+
+        for(VarStructure var : parameters) {
+            if(var instanceof VarDeclaration) {
+                symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
             }
         }
     }
