@@ -37,4 +37,11 @@ public class ComponentBlock extends Component {
             }
         }
     }
+
+    @Override
+    public void checkSymbolTable() {
+        for(Component component: components) {
+            component.checkSymbolTable();
+        }
+    }
 }

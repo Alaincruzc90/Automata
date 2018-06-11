@@ -36,4 +36,9 @@ public class Call extends Component implements Assignment {
     public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
+
+    @Override
+    public void checkSymbolTable() {
+
+    }
 }

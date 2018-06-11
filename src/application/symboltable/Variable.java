@@ -18,4 +18,9 @@ public class Variable extends Symbols {
     public void setType(VarType type) {
         this.type = type;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Variable && this.getName().equals(((Variable) obj).getName()));
+    }
 }

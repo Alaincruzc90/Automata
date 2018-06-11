@@ -2,13 +2,10 @@ public class ProyectoAutomatas {
 
 define var
   {
-  // arreglo de booleanos de tamaño n y se inicializa en true
-      Array boolean numeric_table size n;
-      int index = 1;
-  // arreglo dinámico para guardar los números primos y se recorre el arreglo con dos ciclos anidados
-      Array int prime_numbers;
-      index = 1;  // se reinicia en uno
-      int i = 0;  // se define e inicializa un entero para el for dentro del while
+      int index = 0;  // se define e inicializa un entero para el for dentro del while
+      index = 1;
+      int y;
+      int z = 0;
   }
 // Criba de Eratóstenes 
 func eratosthenes params int n return List
@@ -18,9 +15,9 @@ func eratosthenes params int n return List
   {
   // arreglo de booleanos de tamaño n y se inicializa en true
       Array boolean numeric_table size n;   
-      int index = 1;  
+      int index = 1;
   // arreglo dinámico para guardar los números primos y se recorre el arreglo con dos ciclos anidados
-      Array int prime_numbers;
+      List int prime_numbers;
       index = 1;  // se reinicia en uno
       int i = 0;  // se define e inicializa un entero para el for dentro del while
  

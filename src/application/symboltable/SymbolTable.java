@@ -1,6 +1,7 @@
 package application.symboltable;
 
 import application.enums.SymbolTypes;
+import application.enums.VarType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,5 +34,59 @@ public class SymbolTable {
 
     public void emptyLocalList() {
         localSymbols.clear();
+    }
+
+    public Variable lookupVariable(String identifier) {
+        for(Symbols symbol : globalSymbols) {
+            if(symbol instanceof Variable) {
+                if(symbol.getName().equals(identifier)) {
+                    return (Variable) symbol;
+                }
+            }
+        }
+        for(Symbols symbol : localSymbols) {
+            if(symbol instanceof Variable) {
+                if(symbol.getName().equals(identifier)) {
+                    return (Variable) symbol;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Function lookupFunc(String identifier) {
+        for(Symbols symbol : globalSymbols) {
+            if(symbol instanceof Function) {
+                if(symbol.getName().equals(identifier)) {
+                    return (Function) symbol;
+                }
+            }
+        }
+        for(Symbols symbol : localSymbols) {
+            if(symbol instanceof Function) {
+                if(symbol.getName().equals(identifier)) {
+                    return (Function) symbol;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Procedure lookupProc(String identifier) {
+        for(Symbols symbol : globalSymbols) {
+            if(symbol instanceof Procedure) {
+                if(symbol.getName().equals(identifier)) {
+                    return (Procedure) symbol;
+                }
+            }
+        }
+        for(Symbols symbol : localSymbols) {
+            if(symbol instanceof Procedure) {
+                if(symbol.getName().equals(identifier)) {
+                    return (Procedure) symbol;
+                }
+            }
+        }
+        return null;
     }
 }

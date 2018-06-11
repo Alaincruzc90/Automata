@@ -16,6 +16,7 @@ import application.variables.*;
 import application.condition.*;
 import application.component.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.List;
 import java.util.LinkedList;
@@ -446,23 +447,17 @@ var_def ::=	var_type:s var_assig:v EOL var_def:c
 		RESULT = c;
 		:}
 		|
-		var_type:s var_assig:v EOL
-		{:
-		RESULT = new HashSet<VarStructure>();
-        RESULT.add(new VarDeclarationAssignment(DeclarationType.DECLARATION_ASSIGNMENT, v.getIdentifierName(), s, v));
-		:}
-		|
 		var_type:s IDENTIFIER:i EOL var_def:c
 		{:
 		 c.add(new VarDeclaration(DeclarationType.DECLARATION, i, s));
          RESULT = c;
 		 :}
 		|
-		var_type:s IDENTIFIER:i EOL
+		var_assig:v EOL var_def:c
 		{:
-		 RESULT = new HashSet<VarStructure>();
-		 RESULT.add(new VarDeclaration(DeclarationType.DECLARATION, i, s));
-		 :}
+        c.add(new VarAssignment(DeclarationType.ASSIGNMENT, v.getIdentifierName(), v));
+        RESULT = c;
+        :}
 		|
 		array_def:s var_def:c
 		{:
@@ -470,23 +465,9 @@ var_def ::=	var_type:s var_assig:v EOL var_def:c
 		RESULT = c;
 		:}
 		|
-		var_assig:s EOL var_def:c
 		{:
-		 c.add(new VarAssignment(DeclarationType.ASSIGNMENT, s.getIdentifierName(), s));
-		 RESULT = c;
-		 :}
-		|
-		array_def:s
-		{:
-		RESULT = new HashSet<VarStructure>();
-		RESULT.add(s);
-		:}
-		|
-		var_assig:s EOL
-		{:
-		RESULT = new HashSet<VarStructure>();
-	    RESULT.add(new VarAssignment(DeclarationType.ASSIGNMENT, s.getIdentifierName(), s));
-		:}
+        RESULT = new LinkedHashSet<VarStructure>();
+        :}
 		;
 
 var_assig ::=	IDENTIFIER:i ASSIGNMENT math_expr:s
@@ -511,8 +492,8 @@ index ::=	num | IDENTIFIER math_sym num;
 array_def ::=	ARRAY var_type:v IDENTIFIER:i array_size:a EOL
 		{: RESULT = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.ARRAY); :}
 		|
-		ARRAY var_type:v IDENTIFIER:i EOL
-		{: RESULT = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.ARRAY); :}
+		LIST var_type:v IDENTIFIER:i EOL
+		{: RESULT = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.LIST); :}
 		;
 
 math_expr ::=	math_part:s SUM math_expr:v

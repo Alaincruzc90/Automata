@@ -25,4 +25,9 @@ public class Read extends Component {
     public void setIdentifier(IdentifierAssignment identifier) {
         this.identifier = identifier;
     }
+
+    @Override
+    public void checkSymbolTable() {
+
+    }
 }

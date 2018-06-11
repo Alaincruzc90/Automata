@@ -4,14 +4,12 @@ import application.enums.VarType;
 import application.method.Func;
 import application.method.Method;
 import application.symboltable.*;
+import application.variables.VarAssignment;
 import application.variables.VarDeclaration;
 import application.variables.VarDeclarationAssignment;
 import application.variables.VarStructure;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ClassObject {
 
@@ -28,6 +26,7 @@ public class ClassObject {
     }
 
     public ClassObject() {
+
     }
 
     public Set<VarStructure> getGlobalVariables() {
@@ -51,7 +50,11 @@ public class ClassObject {
         String space = "    ";
         for (VarStructure var:
              globalVariables) {
-            System.out.println("Definición de variable -> " + var.getIdentifierName());
+            if(var instanceof VarAssignment) {
+                System.out.println("Assignación de variable -> " + var.getIdentifierName());
+            } else {
+                System.out.println("Definición de variable -> " + var.getIdentifierName());
+            }
         }
         for (Method method:
                 methods) {
@@ -66,8 +69,14 @@ public class ClassObject {
                 symbolTable.getGlobalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
             } else if (var instanceof VarDeclarationAssignment) {
                 symbolTable.getGlobalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
+            } else if (var instanceof VarAssignment) {
+                Variable variable = symbolTable.lookupVariable(var.getIdentifierName());
+                if (variable == null) {
+                    System.out.println("ERROR ----> La variable " + var.getIdentifierName() + " no ha sido declarada.");
+                }
             }
         }
+
 
         for(Method method : methods) {
             if(method instanceof Func) {

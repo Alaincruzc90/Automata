@@ -25,4 +25,9 @@ public class Print extends Component {
     public void setText(Assignment text) {
         this.text = text;
     }
+
+    @Override
+    public void checkSymbolTable() {
+
+    }
 }

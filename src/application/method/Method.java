@@ -5,6 +5,7 @@ import application.component.Component;
 import application.enums.MethodType;
 import application.symboltable.SymbolTable;
 import application.symboltable.Variable;
+import application.variables.VarAssignment;
 import application.variables.VarDeclaration;
 import application.variables.VarDeclarationAssignment;
 import application.variables.VarStructure;
@@ -27,7 +28,7 @@ public class Method {
         this.identifier = null;
         this.parameters = new LinkedHashSet<>();
         this.localVariables = new LinkedHashSet<>();
-        this.components = null;
+        this.components = new LinkedList<>();
         this.methodType = null;
         this.father = null;
     }
@@ -49,7 +50,11 @@ public class Method {
         } else {
             this.localVariables = localVariables;
         }
-        this.components = components;
+        if (components == null) {
+            this.components = new LinkedList<>();
+        } else {
+            this.components = components;
+        }
         this.methodType = methodType;
         this.father = father;
     }
@@ -122,18 +127,27 @@ public class Method {
 
     public void fillLocalSymbols(SymbolTable symbolTable) {
 
+        for(VarStructure var : parameters) {
+            if(var instanceof VarDeclaration) {
+                symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
+            }
+        }
+
         for(VarStructure var : localVariables) {
             if(var instanceof VarDeclaration) {
                 symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
             } else if (var instanceof VarDeclarationAssignment) {
                 symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
+            } else if (var instanceof VarAssignment) {
+                Variable variable = symbolTable.lookupVariable(var.getIdentifierName());
+                if (variable == null) {
+                    System.out.println("ERROR ----> La variable " + var.getIdentifierName() + " no ha sido declarada.");
+                }
             }
         }
 
-        for(VarStructure var : parameters) {
-            if(var instanceof VarDeclaration) {
-                symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
-            }
+        for(Component component : components) {
+
         }
     }
 }

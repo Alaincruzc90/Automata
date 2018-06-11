@@ -25,4 +25,9 @@ public class Return extends Component implements Assignment {
     public void setValue(Assignment value) {
         this.assignment = value;
     }
+
+    @Override
+    public void checkSymbolTable() {
+
+    }
 }

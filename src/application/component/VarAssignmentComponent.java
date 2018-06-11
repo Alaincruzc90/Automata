@@ -36,4 +36,9 @@ public class VarAssignmentComponent extends Component {
     public void setAssignment(Assignment assignment) {
         this.assignment = assignment;
     }
+
+    @Override
+    public void checkSymbolTable() {
+
+    }
 }
