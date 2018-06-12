@@ -3,6 +3,7 @@ package application.component;
 import application.assignment.IdentifierAssignment;
 import application.enums.ComponentType;
 import application.method.Method;
+import application.symboltable.SymbolTable;
 
 public class Read extends Component {
 
@@ -27,7 +28,7 @@ public class Read extends Component {
     }
 
     @Override
-    public void checkSymbolTable() {
-
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        identifier.checkSymbolTable(symbolTable);
     }
 }

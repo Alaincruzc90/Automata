@@ -1,6 +1,7 @@
 package application.assignment.math;
 
 import application.assignment.Assignment;
+import application.symboltable.SymbolTable;
 
 public abstract class MathOperation implements Assignment {
 
@@ -31,4 +32,10 @@ public abstract class MathOperation implements Assignment {
     }
 
     public abstract <K> K operation();
+
+    @Override
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        leftAssignment.checkSymbolTable(symbolTable);
+        rightAssignment.checkSymbolTable(symbolTable);
+    }
 }

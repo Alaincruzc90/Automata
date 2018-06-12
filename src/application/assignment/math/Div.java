@@ -1,6 +1,7 @@
 package application.assignment.math;
 
 import application.assignment.Assignment;
+import application.symboltable.SymbolTable;
 
 public class Div extends MathOperation {
 

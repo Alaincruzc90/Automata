@@ -15,6 +15,7 @@ import application.assignment.math.*;
 import application.variables.*;
 import application.condition.*;
 import application.component.*;
+import application.symboltable.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -145,8 +146,7 @@ non terminal Assignment call, return_exp;
 
 class_def ::= 	PUBLIC CLASS_DEF IDENTIFIER:s CODE_BLOCK_START expr_list:o CODE_BLOCK_END
 		{: RESULT = new ClassObject(o.getGlobalVariables(), o.getMethods(), s);
-		   RESULT.fillSymbolTable();
-		   RESULT.print();:}
+		   RESULT.fillSymbolTable();:}
 		|
 		PUBLIC CLASS_DEF IDENTIFIER:s CODE_BLOCK_START CODE_BLOCK_END
 		{: RESULT = new ClassObject(null, null, s); :}
@@ -302,10 +302,10 @@ inst_block ::=	for:s inst_block:c
         RESULT.add(s);
 		:}
 		|
-		call:s
+		call:s inst_block:c
 		{:
-		RESULT = new LinkedList<>();
-        RESULT.add((Component)s);
+        c.add((Component)s);
+        RESULT = c;
 		:}
 		|
 		io_oper:s inst_block:c
@@ -319,6 +319,12 @@ inst_block ::=	for:s inst_block:c
 		RESULT = new LinkedList<>();
         RESULT.add(s);
 		:}
+		|
+        call:s
+        {:
+        RESULT = new LinkedList<>();
+        RESULT.add((Component)s);
+        :}
 		;
 
 
@@ -407,8 +413,8 @@ conditional ::=
         math_expr:s cond_type:c math_expr:v
 		{: RESULT = new Condition(s, v, c); :}
 		|
-		IDENTIFIER:i POS index cond_type:c math_expr:v
-		{: RESULT = new Condition(new IdentifierAssignment(i), v, c); :}
+		IDENTIFIER:i POS math_expr:s cond_type:c math_expr:v
+		{: RESULT = new Condition(new ArrayAssignment(null, i, s), v, c); :}
 		|
 		IDENTIFIER:i
 		{: RESULT = new Condition(new IdentifierAssignment(i), new ValueAssignment<Boolean>(true), ComparatorType.EQUALS); :}
@@ -443,19 +449,27 @@ cond_type ::=
 
 var_def ::=	var_type:s var_assig:v EOL var_def:c
 		{:
-		c.add(new VarDeclarationAssignment(DeclarationType.DECLARATION_ASSIGNMENT, v.getIdentifierName(), s, v));
+		VarDeclarationAssignment decla = new VarDeclarationAssignment(DeclarationType.DECLARATION_ASSIGNMENT, v.getIdentifierName(), s, v);
+		if (c.contains(decla)) {
+		    throw new Exception("Variable ya declarada " + decla.getIdentifierName());
+		}
+		c.add(decla);
 		RESULT = c;
 		:}
 		|
 		var_type:s IDENTIFIER:i EOL var_def:c
 		{:
-		 c.add(new VarDeclaration(DeclarationType.DECLARATION, i, s));
+		VarDeclaration decla = new VarDeclaration(DeclarationType.DECLARATION, i, s);
+		if (c.contains(decla)) {
+            throw new Exception("Variable ya declarada " + decla.getIdentifierName());
+        }
+		 c.add(decla);
          RESULT = c;
 		 :}
 		|
 		var_assig:v EOL var_def:c
 		{:
-        c.add(new VarAssignment(DeclarationType.ASSIGNMENT, v.getIdentifierName(), v));
+        c.add(v);
         RESULT = c;
         :}
 		|
@@ -465,6 +479,16 @@ var_def ::=	var_type:s var_assig:v EOL var_def:c
 		RESULT = c;
 		:}
 		|
+        LIST var_type:v IDENTIFIER:i EOL var_def:c
+        {:
+        VarDeclaration decla = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.LIST);
+        if (c.contains(decla)) {
+             throw new Exception("Variable ya declarada " + decla.getIdentifierName());
+         }
+         c.add(decla);
+          RESULT = c;
+         :}
+		|
 		{:
         RESULT = new LinkedHashSet<VarStructure>();
         :}
@@ -473,11 +497,11 @@ var_def ::=	var_type:s var_assig:v EOL var_def:c
 var_assig ::=	IDENTIFIER:i ASSIGNMENT math_expr:s
 		{: RESULT = new VarAssignment(DeclarationType.ASSIGNMENT, i, s); :}
 		|
-		IDENTIFIER:i POS index ASSIGNMENT tof:s
-		{: RESULT = new VarAssignment(DeclarationType.ASSIGNMENT, i, s); :}
+		IDENTIFIER:i POS math_expr:m ASSIGNMENT math_expr:v
+		{: RESULT = new VarAssignment(DeclarationType.ASSIGNMENT, i, new ArrayAssignment(v, i, m)); :}
 		|
-		IDENTIFIER:i INSERT index
-		{: RESULT = new VarAssignment(DeclarationType.ASSIGNMENT, i, new ValueAssignment<String>("Array:insert")); :}
+		IDENTIFIER:i INSERT math_expr:m
+		{: RESULT = new VarAssignment(DeclarationType.ASSIGNMENT, i, m); :}
 		;
 
 tof ::=		TRUE
@@ -487,13 +511,8 @@ tof ::=		TRUE
             {: RESULT = new ValueAssignment<Boolean>(false); :}
 		;
 
-index ::=	num | IDENTIFIER math_sym num;
-
-array_def ::=	ARRAY var_type:v IDENTIFIER:i array_size:a EOL
-		{: RESULT = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.ARRAY); :}
-		|
-		LIST var_type:v IDENTIFIER:i EOL
-		{: RESULT = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.LIST); :}
+array_def ::=	ARRAY var_type:v IDENTIFIER:i SIZE math_expr:a EOL
+		{: RESULT = new ArrayDeclaration(DeclarationType.DECLARATION, i, VarType.ARRAY, a); :}
 		;
 
 math_expr ::=	math_part:s SUM math_expr:v
@@ -517,11 +536,18 @@ math_part ::=	PARENTHESIS_LEFT math_expr:s PARENTHESIS_RIGHT
 		    RESULT = new ValueAssignment<String>((String)s);
 		} else if(s instanceof Double) {
 		    RESULT = new ValueAssignment<Double>((Double)s);
-		}
+		} else if(s instanceof Integer) {
+		    RESULT = new ValueAssignment<Integer>((Integer)s);
+		} else if(s instanceof Float) {
+            RESULT = new ValueAssignment<Float>((Float)s);
+        }
 		:}
 		|
 		factor:f
 		{: RESULT = f; :}
+		|
+		call:c
+		{: RESULT = c; :}
 		;
 
 
@@ -531,24 +557,35 @@ return ::=	RETURN return_exp:s EOL
 		:}
 		;
 
-call ::=	CALL IDENTIFIER:s WITH math_part:m
+call ::=	CALL IDENTIFIER:s WITH term:t
 		{:
-		    RESULT = new Call(ComponentType.CALL, m, s);
+		    Assignment assignment = null;
+		    if(t instanceof IdentifierAssignment) {
+                assignment = (IdentifierAssignment)t;
+            } else if(t instanceof String) {
+                assignment = new ValueAssignment<String>((String)t);
+            } else if(t instanceof Double) {
+                assignment = new ValueAssignment<Double>((Double)t);
+            } else if(t instanceof Integer) {
+                assignment = new ValueAssignment<Integer>((Integer)t);
+            } else if(t instanceof Float) {
+                assignment = new ValueAssignment<Float>((Float)t);
+            }
+		    RESULT = new Call(ComponentType.CALL, assignment, s);
 		:}
+		|
+		CALL IDENTIFIER:i WITH PARENTHESIS_LEFT math_expr:s PARENTHESIS_RIGHT
+		{:
+		 RESULT = new Call(ComponentType.CALL, s, i);
+		 :}
+		|
+		CALL IDENTIFIER:i WITH EMPTY EOL
+		{: RESULT = new Call(ComponentType.CALL, null, i); :}
 		;
 
 return_exp ::=
-        math_part:s
+        math_expr:s
         {: RESULT = s; :}
-		|
-		call:s
-		{: RESULT = s; :}
-		|
-		call:s SUM return_exp:v
-		{: RESULT = new Sum(s, v); :}
-		|
-		call:s SUBTRACTION return_exp:v
-		{: RESULT = new Minus(s, v); :}
 		;
 
 
@@ -595,18 +632,7 @@ term ::= num:s
 		IDENTIFIER:s
 		{: RESULT = new IdentifierAssignment(s.toString()); :}
 		|
-		tof		
-		;
-
-array_size ::=	SIZE num_iden:s
-		{: RESULT = s; :}
-		|
-		SIZE IDENTIFIER:s
-		{: RESULT = s; :}
-		;
-
-num_iden ::=	num:s
-		{: RESULT = s; :}
+		tof
 		;
 
 var_type ::=	BOOLEAN 
@@ -632,15 +658,6 @@ var_type ::=	BOOLEAN
 		|
 		LIST 
 		{: RESULT = VarType.LIST; :}
-		;
-
-math_sym ::= SUM
-		|
-		SUBTRACTION
-		|
-		DIVISION
-		|
-		MULTIPLICATION
 		;
 
 num ::= 	NUM:n 

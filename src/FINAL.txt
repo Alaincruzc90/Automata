@@ -1,22 +1,13 @@
 public class ProyectoAutomatas {
 
-define var
-  {
-      int index = 0;  // se define e inicializa un entero para el for dentro del while
-      index = 1;
-      int y;
-      int z = 0;
-  }
 // Criba de Eratóstenes 
 func eratosthenes params int n return List
 {
  
   define var 
   {
-  // arreglo de booleanos de tamaño n y se inicializa en true
       Array boolean numeric_table size n;   
       int index = 1;
-  // arreglo dinámico para guardar los números primos y se recorre el arreglo con dos ciclos anidados
       List int prime_numbers;
       index = 1;  // se reinicia en uno
       int i = 0;  // se define e inicializa un entero para el for dentro del while
@@ -39,7 +30,7 @@ func eratosthenes params int n return List
  
           i = index;
          // marca todos los múltiplos de cada índice
-         for  i to n increase index     
+         for i to n increase index
          {
                  numeric_table pos i + 1 = false;
          }
@@ -77,14 +68,14 @@ proc drawTriangle params empty
 
 // Sucesión de fibonacci.
 func fibonacci params int n return int
-{ 
+{
+    call drawTriangle with empty;
      if n < 2 then  //Condición de parada
      { 
      } 
-    else  //Se obtienen los demás números de la sucesión
+    else
     {
-          //Se llama a fibonacci con n-1 y n-2 de la siguiente forma: 
-          return call fibonacci with (n - 1) + call fibonacci with (n - 2);
+          return call fibonacci with (n + 2) + call fibonacci with (n + 1);
     }
 }
 

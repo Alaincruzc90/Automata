@@ -1,5 +1,7 @@
 package application.assignment;
 
+import application.symboltable.SymbolTable;
+
 public class IdentifierAssignment implements Assignment {
 
     private String identifier;
@@ -14,5 +16,12 @@ public class IdentifierAssignment implements Assignment {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        if(symbolTable.lookupVariable(identifier) == null) {
+            throw new Exception("No se encontro la variable " + identifier);
+        }
     }
 }

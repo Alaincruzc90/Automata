@@ -3,6 +3,7 @@ package application.component;
 import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.method.Method;
+import application.symboltable.SymbolTable;
 
 import java.util.List;
 
@@ -48,5 +49,13 @@ public class For extends ComponentBlock {
 
     public void setActual(Assignment actual) {
         this.actual = actual;
+    }
+
+    @Override
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        maxValue.checkSymbolTable(symbolTable);
+        stripe.checkSymbolTable(symbolTable);
+        actual.checkSymbolTable(symbolTable);
+        super.checkSymbolTable(symbolTable);
     }
 }

@@ -3,17 +3,13 @@ package application.method;
 import application.classobject.ClassObject;
 import application.component.Component;
 import application.enums.MethodType;
+import application.symboltable.ArraySymbol;
 import application.symboltable.SymbolTable;
+import application.symboltable.Symbols;
 import application.symboltable.Variable;
-import application.variables.VarAssignment;
-import application.variables.VarDeclaration;
-import application.variables.VarDeclarationAssignment;
-import application.variables.VarStructure;
+import application.variables.*;
 
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Method {
 
@@ -125,29 +121,47 @@ public class Method {
         }
     }
 
-    public void fillLocalSymbols(SymbolTable symbolTable) {
+    public void fillLocalSymbols(SymbolTable symbolTable) throws Exception{
 
-        for(VarStructure var : parameters) {
+        List list = new ArrayList(parameters);
+        Collections.reverse(list);
+        Set<VarStructure> resultParameters = new LinkedHashSet<>(list);
+
+        for(VarStructure var : resultParameters) {
             if(var instanceof VarDeclaration) {
                 symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
             }
         }
 
-        for(VarStructure var : localVariables) {
+        List localsList = new ArrayList(localVariables);
+        Collections.reverse(localsList);
+        Set<VarStructure> resultLocals = new LinkedHashSet<>(localsList);
+
+        for(VarStructure var : resultLocals) {
             if(var instanceof VarDeclaration) {
                 symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
             } else if (var instanceof VarDeclarationAssignment) {
                 symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
+            } else if (var instanceof ArrayDeclaration) {
+                symbolTable.getLocalSymbols().add(new ArraySymbol(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
             } else if (var instanceof VarAssignment) {
-                Variable variable = symbolTable.lookupVariable(var.getIdentifierName());
+                Symbols variable = symbolTable.lookupVariable(var.getIdentifierName());
                 if (variable == null) {
                     System.out.println("ERROR ----> La variable " + var.getIdentifierName() + " no ha sido declarada.");
                 }
             }
         }
 
-        for(Component component : components) {
+        List componentList = new ArrayList(components);
+        Collections.reverse(componentList);
+        List<Component> resultComponents = new LinkedList<>(componentList);
 
+        for(Component component : resultComponents) {
+            try {
+                component.checkSymbolTable(symbolTable);
+            } catch (Exception e) {
+                throw new Exception("ERROR ----> En el método " + this.identifier + ": " + e.getMessage());
+            }
         }
     }
 }

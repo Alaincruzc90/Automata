@@ -4,10 +4,7 @@ import application.enums.VarType;
 import application.method.Func;
 import application.method.Method;
 import application.symboltable.*;
-import application.variables.VarAssignment;
-import application.variables.VarDeclaration;
-import application.variables.VarDeclarationAssignment;
-import application.variables.VarStructure;
+import application.variables.*;
 
 import java.util.*;
 
@@ -19,7 +16,11 @@ public class ClassObject {
     private SymbolTable symbolTable;
 
     public ClassObject(Set<VarStructure> globalVariables, Set<Method> methods, String name) {
-        this.globalVariables = globalVariables;
+        if(globalVariables == null) {
+            this.globalVariables = new LinkedHashSet<>();
+        } else {
+            this.globalVariables = globalVariables;
+        }
         this.methods = methods;
         this.name = name;
         this.symbolTable = new SymbolTable();
@@ -62,23 +63,33 @@ public class ClassObject {
         }
     }
 
-    public void fillSymbolTable() {
+    public void fillSymbolTable() throws Exception {
 
-        for(VarStructure var : globalVariables) {
+        List list = new ArrayList(globalVariables);
+        Collections.reverse(list);
+        Set<VarStructure> resultGlobals = new LinkedHashSet<>(list);
+
+        for(VarStructure var : resultGlobals) {
             if(var instanceof VarDeclaration ) {
                 symbolTable.getGlobalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
             } else if (var instanceof VarDeclarationAssignment) {
                 symbolTable.getGlobalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
-            } else if (var instanceof VarAssignment) {
-                Variable variable = symbolTable.lookupVariable(var.getIdentifierName());
+            } else if (var instanceof ArrayDeclaration) {
+                symbolTable.getGlobalSymbols().add(new ArraySymbol(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
+            }
+            else if (var instanceof VarAssignment) {
+                Symbols variable = symbolTable.lookupVariable(var.getIdentifierName());
                 if (variable == null) {
                     System.out.println("ERROR ----> La variable " + var.getIdentifierName() + " no ha sido declarada.");
                 }
             }
         }
 
+        List methodList = new ArrayList(methods);
+        Collections.reverse(list);
+        Set<Method> resultMethods = new LinkedHashSet<>(methodList);
 
-        for(Method method : methods) {
+        for(Method method : resultMethods) {
             if(method instanceof Func) {
                 List<VarType> varTypes = new LinkedList<>();
                 for(VarStructure var : method.getParameters()) {

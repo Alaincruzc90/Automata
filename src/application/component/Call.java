@@ -3,6 +3,8 @@ package application.component;
 import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.method.Method;
+import application.symboltable.SymbolTable;
+import application.symboltable.Symbols;
 
 public class Call extends Component implements Assignment {
 
@@ -38,7 +40,12 @@ public class Call extends Component implements Assignment {
     }
 
     @Override
-    public void checkSymbolTable() {
-
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        if(symbolTable.lookupFunc(this.methodName) == null && symbolTable.lookupProc(this.methodName) == null) {
+            throw new Exception("No se encontro el método " + this.methodName + ".");
+        }
+        if(parameter != null) {
+            parameter.checkSymbolTable(symbolTable);
+        }
     }
 }

@@ -3,6 +3,7 @@ package application.component;
 import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.method.Method;
+import application.symboltable.SymbolTable;
 
 public class Print extends Component {
 
@@ -27,7 +28,7 @@ public class Print extends Component {
     }
 
     @Override
-    public void checkSymbolTable() {
-
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        text.checkSymbolTable(symbolTable);
     }
 }

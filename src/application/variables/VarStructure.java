@@ -34,9 +34,13 @@ public class VarStructure {
         if ((obj instanceof VarStructure) &&
                 (((VarStructure) obj).declarationType == DeclarationType.DECLARATION || ((VarStructure) obj).declarationType == DeclarationType.DECLARATION_ASSIGNMENT)) {
             VarStructure comparator = (VarStructure) obj;
-            return this.identifierName.equals(comparator.getIdentifierName()) && this.declarationType == comparator.getDeclarationType();
+            return this.identifierName.equals(comparator.getIdentifierName());
         }
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return identifierName.hashCode();
+    }
 }

@@ -36,18 +36,18 @@ public class SymbolTable {
         localSymbols.clear();
     }
 
-    public Variable lookupVariable(String identifier) {
+    public Symbols lookupVariable(String identifier) {
         for(Symbols symbol : globalSymbols) {
-            if(symbol instanceof Variable) {
+            if(symbol instanceof Variable || symbol instanceof ArraySymbol) {
                 if(symbol.getName().equals(identifier)) {
-                    return (Variable) symbol;
+                    return symbol;
                 }
             }
         }
         for(Symbols symbol : localSymbols) {
-            if(symbol instanceof Variable) {
+            if(symbol instanceof Variable || symbol instanceof ArraySymbol) {
                 if(symbol.getName().equals(identifier)) {
-                    return (Variable) symbol;
+                    return symbol;
                 }
             }
         }

@@ -19,4 +19,5 @@ public class VarDeclaration extends VarStructure {
     public void setVarType(VarType varType) {
         this.varType = varType;
     }
+
 }

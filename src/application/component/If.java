@@ -3,6 +3,7 @@ package application.component;
 import application.condition.Condition;
 import application.enums.ComponentType;
 import application.method.Method;
+import application.symboltable.SymbolTable;
 
 import java.util.List;
 
@@ -37,5 +38,12 @@ public class If extends ComponentBlock {
 
     public void setElseComponent(Component elseComponent) {
         this.elseComponent = elseComponent;
+    }
+
+    @Override
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        condition.checkSymbolTable(symbolTable);
+        super.checkSymbolTable(symbolTable);
+        if (elseComponent != null) elseComponent.checkSymbolTable(symbolTable);
     }
 }

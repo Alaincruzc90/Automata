@@ -1,13 +1,14 @@
 package application.symboltable;
 
 import application.enums.SymbolTypes;
+import application.enums.VarType;
 
 public class ArraySymbol extends Symbols {
 
     private int size;       //array size
-    private SymbolTypes type;    //data type
+    private VarType type;    //data type
 
-    public ArraySymbol(String name, SymbolTypes type){
+    public ArraySymbol(String name, VarType type){
         super(name);
         this.type = type;
     }
@@ -20,11 +21,11 @@ public class ArraySymbol extends Symbols {
         this.size = size;
     }
 
-    public SymbolTypes getType() {
+    public VarType getType() {
         return type;
     }
 
-    public void setType(SymbolTypes type) {
+    public void setType(VarType type) {
         this.type = type;
     }
 }

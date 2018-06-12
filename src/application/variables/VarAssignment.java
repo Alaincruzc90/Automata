@@ -3,6 +3,7 @@ package application.variables;
 import application.assignment.Assignment;
 import application.component.Component;
 import application.enums.DeclarationType;
+import application.symboltable.SymbolTable;
 
 public class VarAssignment extends VarStructure implements Assignment {
 
@@ -19,5 +20,10 @@ public class VarAssignment extends VarStructure implements Assignment {
 
     public void setAssignment(Assignment assignment) {
         this.assignment = assignment;
+    }
+
+    @Override
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        assignment.checkSymbolTable(symbolTable);
     }
 }

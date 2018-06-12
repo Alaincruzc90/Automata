@@ -3,6 +3,7 @@ package application.component;
 import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.method.Method;
+import application.symboltable.SymbolTable;
 
 public class VarAssignmentComponent extends Component {
 
@@ -38,7 +39,9 @@ public class VarAssignmentComponent extends Component {
     }
 
     @Override
-    public void checkSymbolTable() {
-
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+        if(symbolTable.lookupVariable(identifierName) == null) {
+            throw new Exception("No se encontro la variable " + identifierName);
+        }
     }
 }

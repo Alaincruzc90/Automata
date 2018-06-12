@@ -2,7 +2,9 @@ package application.component;
 
 import application.enums.ComponentType;
 import application.method.Method;
+import application.symboltable.SymbolTable;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class ComponentBlock extends Component {
@@ -11,12 +13,20 @@ public class ComponentBlock extends Component {
 
     public ComponentBlock(ComponentType type, List<Component> components, Method father) {
         super(type, father);
-        this.components = components;
+        if(components == null) {
+            this.components = new LinkedList<>();
+        } else {
+            this.components = components;
+        }
     }
 
     public ComponentBlock(ComponentType type, List<Component> components) {
         super(type);
-        this.components = components;
+        if(components == null) {
+            this.components = new LinkedList<>();
+        } else {
+            this.components = components;
+        }
     }
 
     public List<Component> getComponents() {
@@ -39,9 +49,9 @@ public class ComponentBlock extends Component {
     }
 
     @Override
-    public void checkSymbolTable() {
+    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
         for(Component component: components) {
-            component.checkSymbolTable();
+            component.checkSymbolTable(symbolTable);
         }
     }
 }

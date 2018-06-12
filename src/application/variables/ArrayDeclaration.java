@@ -4,15 +4,15 @@ import application.assignment.Assignment;
 import application.enums.DeclarationType;
 import application.enums.VarType;
 
-public class VarDeclarationAssignment extends VarStructure {
+public class ArrayDeclaration extends VarStructure {
 
     private VarType varType;
-    private Assignment assignment;
+    private Assignment pos;
 
-    public VarDeclarationAssignment(DeclarationType declarationType, String identifierName, VarType varType, Assignment assignment) {
+    public ArrayDeclaration(DeclarationType declarationType, String identifierName, VarType varType, Assignment pos) {
         super(declarationType, identifierName);
         this.varType = varType;
-        this.assignment = assignment;
+        this.pos = pos;
     }
 
     public VarType getVarType() {
@@ -23,12 +23,11 @@ public class VarDeclarationAssignment extends VarStructure {
         this.varType = varType;
     }
 
-    public Assignment getAssignment() {
-        return assignment;
+    public Assignment getPos() {
+        return pos;
     }
 
-    public void setAssignment(Assignment assignment) {
-        this.assignment = assignment;
+    public void setPos(Assignment pos) {
+        this.pos = pos;
     }
-
 }

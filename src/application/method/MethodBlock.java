@@ -3,6 +3,7 @@ package application.method;
 import application.component.Component;
 import application.variables.VarStructure;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +14,11 @@ public class MethodBlock {
 
     public MethodBlock(Set<VarStructure> localVariables, List<Component> components) {
         this.localVariables = localVariables;
-        this.components = components;
+        if(components == null) {
+            this.components = new LinkedList<>();
+        } else {
+            this.components = components;
+        }
     }
 
     public Set<VarStructure> getLocalVariables() {
