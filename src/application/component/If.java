@@ -2,8 +2,9 @@ package application.component;
 
 import application.condition.Condition;
 import application.enums.ComponentType;
+import application.enums.VarType;
 import application.method.Method;
-import application.symboltable.SymbolTable;
+import application.symbolTable.SymbolTable;
 
 import java.util.List;
 
@@ -45,5 +46,15 @@ public class If extends ComponentBlock {
         condition.checkSymbolTable(symbolTable);
         super.checkSymbolTable(symbolTable);
         if (elseComponent != null) elseComponent.checkSymbolTable(symbolTable);
+    }
+
+    @Override
+    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
+        super.typeCheck(symbolTable, name);
+    }
+
+    @Override
+    public boolean equalType(VarType varType) {
+        return super.equalType(varType);
     }
 }

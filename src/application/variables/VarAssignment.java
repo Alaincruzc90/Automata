@@ -1,9 +1,9 @@
 package application.variables;
 
 import application.assignment.Assignment;
-import application.component.Component;
 import application.enums.DeclarationType;
-import application.symboltable.SymbolTable;
+import application.enums.VarType;
+import application.symbolTable.SymbolTable;
 
 public class VarAssignment extends VarStructure implements Assignment {
 
@@ -25,5 +25,15 @@ public class VarAssignment extends VarStructure implements Assignment {
     @Override
     public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
         assignment.checkSymbolTable(symbolTable);
+    }
+
+    @Override
+    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
+        this.assignment.typeCheck(symbolTable, name);
+    }
+
+    @Override
+    public boolean equalType(VarType varType) {
+        return this.assignment.equalType(varType);
     }
 }

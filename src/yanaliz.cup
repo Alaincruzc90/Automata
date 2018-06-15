@@ -15,7 +15,7 @@ import application.assignment.math.*;
 import application.variables.*;
 import application.condition.*;
 import application.component.*;
-import application.symboltable.*;
+import application.symbolTable.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;

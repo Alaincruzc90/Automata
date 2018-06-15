@@ -22,7 +22,7 @@ public class Main {
             }
             parser p = new parser(new Lexer(new FileReader(path.getPath())));
             Object result = p.parse().value;
-            String hola = "";
+            //String hola = "";
         } catch (Exception e) {
             /* do cleanup here -- possibly rethrow e */
             e.printStackTrace();

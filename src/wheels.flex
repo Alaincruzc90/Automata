@@ -41,17 +41,17 @@ import java_cup.runtime.*;
   scanner actions.  
 */
 %{   
-    /* To create a new java_cup.runtime.Symbol with information about
+    /* To create a new java_cup.runtime.application.symbolTable.application.symbolTable.Symbols with information about
        the current token, the token will have no value in this
        case. */
-    private Symbol symbol(int type) {
-        return new Symbol(type, yyline, yycolumn);
+    private application.symbolTable.application.symbolTable.Symbols symbols(int type) {
+        return new application.symbolTable.application.symbolTable.Symbols(type, yyline, yycolumn);
     }
     
-    /* Also creates a new java_cup.runtime.Symbol with information
+    /* Also creates a new java_cup.runtime.application.symbolTable.application.symbolTable.Symbols with information
        about the current token, but this object has a value. */
-    private Symbol symbol(int type, Object value) {
-        return new Symbol(type, yyline, yycolumn, value);
+    private application.symbolTable.application.symbolTable.Symbols symbols(int type, Object value) {
+        return new application.symbolTable.application.symbolTable.Symbols(type, yyline, yycolumn, value);
     }
 %}
 
@@ -151,81 +151,81 @@ EXIT = "exit"
 
 {COMMENTS} {/*Do nothing*/}
 
-{QUOTATION_MARKS} {return symbol(sym.QUOTATION_MARKS, new String(yytext()));}
+{QUOTATION_MARKS} {return symbols(sym.QUOTATION_MARKS, new String(yytext()));}
 
-{ARRAY} {return symbol(sym.ARRAY);}
-{BOOLEAN} {return symbol(sym.BOOLEAN);}
-{CALL} {return symbol(sym.CALL);}
-{CHAR} {return symbol(sym.CHAR);}
-{DECREASE} {return symbol(sym.DECREASE);}
-{DEFINE} {return symbol(sym.DEFINE);}
-{DOUBLE} {return symbol(sym.DOUBLE);}
-{ELSE} {return symbol(sym.ELSE);}
-{EMPTY} {return symbol(sym.EMPTY);}
-{EQUALS} {return symbol(sym.EQUALS);}
-{FALSE} {return symbol(sym.FALSE);}
-{FLOAT} {return symbol(sym.FLOAT);}
-{FOR} {return symbol(sym.FOR);}
-{FUNC} {return symbol(sym.FUNC);}
-{IF} {return symbol(sym.IF);}
-{INCREASE} {return symbol(sym.INCREASE);}
-{INSERT} {return symbol(sym.INSERT);}
-{INTERFACE} {return symbol(sym.INTERFACE);}
-{INT} {return symbol(sym.INT);}
-{LENGTH} {return symbol(sym.LENGTH);}
-{LIST} {return symbol(sym.LIST);}
-{NOT} {return symbol(sym.NOT);}
-{PARAMS} {return symbol(sym.PARAMS);}
-{POS} {return symbol(sym.POS);}
-{PRINT} {return symbol(sym.PRINT);}
-{PRIVATE} {return symbol(sym.PRIVATE);}
-{CLASS_DEF} {return symbol(sym.CLASS_DEF);}
-{PROC} {return symbol(sym.PROC);}
-{PUBLIC} {return symbol(sym.PUBLIC);}
-{READ} {return symbol(sym.READ);}
-{RETURN} {return symbol(sym.RETURN);}
-{SIZE} {return symbol(sym.SIZE);}
-{STRING} {return symbol(sym.STRING);}
-{THEN} {return symbol(sym.THEN);}
-{TO} {return symbol(sym.TO);}
-{TRUE} {return symbol(sym.TRUE);}
-{VAR} {return symbol(sym.VAR);}
-{VOID} {return symbol(sym.VOID);}
-{WHILE} {return symbol(sym.WHILE);}
-{WITH} {return symbol(sym.WITH);}
+{ARRAY} {return symbols(sym.ARRAY);}
+{BOOLEAN} {return symbols(sym.BOOLEAN);}
+{CALL} {return symbols(sym.CALL);}
+{CHAR} {return symbols(sym.CHAR);}
+{DECREASE} {return symbols(sym.DECREASE);}
+{DEFINE} {return symbols(sym.DEFINE);}
+{DOUBLE} {return symbols(sym.DOUBLE);}
+{ELSE} {return symbols(sym.ELSE);}
+{EMPTY} {return symbols(sym.EMPTY);}
+{EQUALS} {return symbols(sym.EQUALS);}
+{FALSE} {return symbols(sym.FALSE);}
+{FLOAT} {return symbols(sym.FLOAT);}
+{FOR} {return symbols(sym.FOR);}
+{FUNC} {return symbols(sym.FUNC);}
+{IF} {return symbols(sym.IF);}
+{INCREASE} {return symbols(sym.INCREASE);}
+{INSERT} {return symbols(sym.INSERT);}
+{INTERFACE} {return symbols(sym.INTERFACE);}
+{INT} {return symbols(sym.INT);}
+{LENGTH} {return symbols(sym.LENGTH);}
+{LIST} {return symbols(sym.LIST);}
+{NOT} {return symbols(sym.NOT);}
+{PARAMS} {return symbols(sym.PARAMS);}
+{POS} {return symbols(sym.POS);}
+{PRINT} {return symbols(sym.PRINT);}
+{PRIVATE} {return symbols(sym.PRIVATE);}
+{CLASS_DEF} {return symbols(sym.CLASS_DEF);}
+{PROC} {return symbols(sym.PROC);}
+{PUBLIC} {return symbols(sym.PUBLIC);}
+{READ} {return symbols(sym.READ);}
+{RETURN} {return symbols(sym.RETURN);}
+{SIZE} {return symbols(sym.SIZE);}
+{STRING} {return symbols(sym.STRING);}
+{THEN} {return symbols(sym.THEN);}
+{TO} {return symbols(sym.TO);}
+{TRUE} {return symbols(sym.TRUE);}
+{VAR} {return symbols(sym.VAR);}
+{VOID} {return symbols(sym.VOID);}
+{WHILE} {return symbols(sym.WHILE);}
+{WITH} {return symbols(sym.WITH);}
 
-{IDENTIFIER} {return symbol(sym.IDENTIFIER, new String(yytext()));}
+{IDENTIFIER} {return symbols(sym.IDENTIFIER, new String(yytext()));}
 
-{SUM} {return symbol(sym.SUM);}
-{SUBTRACTION} {return symbol(sym.SUBTRACTION);} 
-{DIVISION} {return symbol(sym.DIVISION);}
-{MULTIPLICATION} {return symbol(sym.MULTIPLICATION);}
-{GREATER_THAN} {return symbol(sym.GREATER_THAN);}
-{SMALLER_THAN} {return symbol(sym.SMALLER_THAN);}
-{GREATER_THAN_EQUALS} {return symbol(sym.GREATER_THAN_EQUALS);}
-{SMALLER_THAN_EQUALS} {return symbol(sym.SMALLER_THAN_EQUALS);}
-{AND} {return symbol(sym.AND);}
-{OR} {return symbol(sym.OR);}
+{SUM} {return symbols(sym.SUM);}
+{SUBTRACTION} {return symbols(sym.SUBTRACTION);}
+{DIVISION} {return symbols(sym.DIVISION);}
+{MULTIPLICATION} {return symbols(sym.MULTIPLICATION);}
+{GREATER_THAN} {return symbols(sym.GREATER_THAN);}
+{SMALLER_THAN} {return symbols(sym.SMALLER_THAN);}
+{GREATER_THAN_EQUALS} {return symbols(sym.GREATER_THAN_EQUALS);}
+{SMALLER_THAN_EQUALS} {return symbols(sym.SMALLER_THAN_EQUALS);}
+{AND} {return symbols(sym.AND);}
+{OR} {return symbols(sym.OR);}
 
-{NUM}  { return symbol(sym.NUM, new Float(yytext())); }
+{NUM}  { return symbols(sym.NUM, new Float(yytext())); }
 
-{CODE_BLOCK_START} {return symbol(sym.CODE_BLOCK_START);}
-{CODE_BLOCK_END} {return symbol(sym.CODE_BLOCK_END);}
+{CODE_BLOCK_START} {return symbols(sym.CODE_BLOCK_START);}
+{CODE_BLOCK_END} {return symbols(sym.CODE_BLOCK_END);}
 
-{PARENTHESIS_RIGHT} {return symbol(sym.PARENTHESIS_RIGHT);}  
-{PARENTHESIS_LEFT} {return symbol(sym.PARENTHESIS_LEFT);}
-{PARENTHESIS_SQRIGHT} {return symbol(sym.PARENTHESIS_SQRIGHT);}
-{PARENTHESIS_SQLEFT} {return symbol(sym.PARENTHESIS_SQLEFT);}
+{PARENTHESIS_RIGHT} {return symbols(sym.PARENTHESIS_RIGHT);}
+{PARENTHESIS_LEFT} {return symbols(sym.PARENTHESIS_LEFT);}
+{PARENTHESIS_SQRIGHT} {return symbols(sym.PARENTHESIS_SQRIGHT);}
+{PARENTHESIS_SQLEFT} {return symbols(sym.PARENTHESIS_SQLEFT);}
 
-{SIMPLE_QUOTATION} { return symbol(sym.SIMPLE_QUOTATION, new String(yytext()));}
-{COMMA} {return symbol(sym.COMMA);}
-{DESTROYER_IDENTIFY} {return symbol(sym.DESTROYER_IDENTIFY);}
-{ASSIGNMENT} {return symbol(sym.ASSIGNMENT);}
-{EOL} {return symbol(sym.EOL);}
+{SIMPLE_QUOTATION} { return symbols(sym.SIMPLE_QUOTATION, new String(yytext()));}
+{COMMA} {return symbols(sym.COMMA);}
+{DESTROYER_IDENTIFY} {return symbols(sym.DESTROYER_IDENTIFY);}
+{ASSIGNMENT} {return symbols(sym.ASSIGNMENT);}
+{EOL} {return symbols(sym.EOL);}
 
-{ERRORS}  { return symbol(sym.ERRORS, new String(yytext()));}
+{ERRORS}  { return symbols(sym.ERRORS, new String(yytext()));}
 
-{EXIT} { return symbol(sym.EXIT);}
+{EXIT} { return symbols(sym.EXIT);}
 
 }
 	    

@@ -1,4 +1,4 @@
-package application.symboltable;
+package application.symbolTable;
 
 import application.enums.VarType;
 

@@ -2,8 +2,9 @@ package application.component;
 
 import application.assignment.Assignment;
 import application.enums.ComponentType;
+import application.enums.VarType;
 import application.method.Method;
-import application.symboltable.SymbolTable;
+import application.symbolTable.SymbolTable;
 
 public class VarAssignmentComponent extends Component {
 
@@ -43,5 +44,15 @@ public class VarAssignmentComponent extends Component {
         if(symbolTable.lookupVariable(identifierName) == null) {
             throw new Exception("No se encontro la variable " + identifierName);
         }
+    }
+
+    @Override
+    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
+        this.assignment.typeCheck(symbolTable, this.identifierName);
+    }
+
+    @Override
+    public boolean equalType(VarType varType) {
+        return this.assignment.equalType(varType);
     }
 }

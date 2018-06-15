@@ -1,7 +1,8 @@
 package application.assignment.math;
 
 import application.assignment.Assignment;
-import application.symboltable.SymbolTable;
+import application.enums.VarType;
+import application.symbolTable.SymbolTable;
 
 public abstract class MathOperation implements Assignment {
 
@@ -37,5 +38,15 @@ public abstract class MathOperation implements Assignment {
     public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
         leftAssignment.checkSymbolTable(symbolTable);
         rightAssignment.checkSymbolTable(symbolTable);
+    }
+
+    @Override
+    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
+
+    }
+
+    @Override
+    public boolean equalType(VarType varType) {
+        return false;
     }
 }

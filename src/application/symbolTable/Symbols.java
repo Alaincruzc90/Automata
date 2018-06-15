@@ -1,4 +1,4 @@
-package application.symboltable;
+package application.symbolTable;
 
 public class Symbols {
 

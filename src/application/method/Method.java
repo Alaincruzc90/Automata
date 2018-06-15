@@ -3,10 +3,10 @@ package application.method;
 import application.classobject.ClassObject;
 import application.component.Component;
 import application.enums.MethodType;
-import application.symboltable.ArraySymbol;
-import application.symboltable.SymbolTable;
-import application.symboltable.Symbols;
-import application.symboltable.Variable;
+import application.symbolTable.ArraySymbols;
+import application.symbolTable.SymbolTable;
+import application.symbolTable.Symbols;
+import application.symbolTable.Variable;
 import application.variables.*;
 
 import java.util.*;
@@ -143,7 +143,7 @@ public class Method {
             } else if (var instanceof VarDeclarationAssignment) {
                 symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
             } else if (var instanceof ArrayDeclaration) {
-                symbolTable.getLocalSymbols().add(new ArraySymbol(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
+                symbolTable.getLocalSymbols().add(new ArraySymbols(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
             } else if (var instanceof VarAssignment) {
                 Symbols variable = symbolTable.lookupVariable(var.getIdentifierName());
                 if (variable == null) {

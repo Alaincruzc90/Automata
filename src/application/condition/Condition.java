@@ -2,7 +2,7 @@ package application.condition;
 
 import application.assignment.Assignment;
 import application.enums.ComparatorType;
-import application.symboltable.SymbolTable;
+import application.symbolTable.SymbolTable;
 
 public class Condition {
 

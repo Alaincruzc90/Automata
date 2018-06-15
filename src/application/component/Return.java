@@ -2,8 +2,9 @@ package application.component;
 
 import application.assignment.Assignment;
 import application.enums.ComponentType;
+import application.enums.VarType;
 import application.method.Method;
-import application.symboltable.SymbolTable;
+import application.symbolTable.SymbolTable;
 
 public class Return extends Component implements Assignment {
 
@@ -30,5 +31,15 @@ public class Return extends Component implements Assignment {
     @Override
     public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
         assignment.checkSymbolTable(symbolTable);
+    }
+
+    @Override
+    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
+        this.assignment.typeCheck(symbolTable, name);
+    }
+
+    @Override
+    public boolean equalType(VarType varType) {
+        return this.assignment.equalType(varType);
     }
 }

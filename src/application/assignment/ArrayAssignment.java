@@ -1,6 +1,7 @@
 package application.assignment;
 
-import application.symboltable.SymbolTable;
+import application.enums.VarType;
+import application.symbolTable.SymbolTable;
 
 public class ArrayAssignment implements Assignment {
 
@@ -43,5 +44,15 @@ public class ArrayAssignment implements Assignment {
         if (symbolTable.lookupVariable(this.identifier) == null) {
             throw new Exception("No se encontro la variable " + this.identifier);
         }
+    }
+
+    @Override
+    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
+        value.typeCheck(symbolTable, name);
+    }
+
+    @Override
+    public boolean equalType(VarType varType) {
+        return value.equalType(varType);
     }
 }

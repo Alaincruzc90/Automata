@@ -1,7 +1,8 @@
 package application.assignment;
 
 import application.component.Call;
-import application.symboltable.SymbolTable;
+import application.enums.VarType;
+import application.symbolTable.SymbolTable;
 
 public class CallAssignment implements Assignment {
 
@@ -22,5 +23,15 @@ public class CallAssignment implements Assignment {
     @Override
     public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
         call.checkSymbolTable(symbolTable);
+    }
+
+    @Override
+    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
+        call.typeCheck(symbolTable, name);
+    }
+
+    @Override
+    public boolean equalType(VarType varType) {
+        return call.equalType(varType);
     }
 }

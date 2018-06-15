@@ -1,9 +1,10 @@
 package application.classobject;
 
+import application.assignment.ArrayAssignment;
 import application.enums.VarType;
 import application.method.Func;
 import application.method.Method;
-import application.symboltable.*;
+import application.symbolTable.*;
 import application.variables.*;
 
 import java.util.*;
@@ -64,7 +65,6 @@ public class ClassObject {
     }
 
     public void fillSymbolTable() throws Exception {
-
         List list = new ArrayList(globalVariables);
         Collections.reverse(list);
         Set<VarStructure> resultGlobals = new LinkedHashSet<>(list);
@@ -75,9 +75,8 @@ public class ClassObject {
             } else if (var instanceof VarDeclarationAssignment) {
                 symbolTable.getGlobalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
             } else if (var instanceof ArrayDeclaration) {
-                symbolTable.getGlobalSymbols().add(new ArraySymbol(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
-            }
-            else if (var instanceof VarAssignment) {
+                symbolTable.getGlobalSymbols().add(new ArraySymbols(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
+            } else if (var instanceof VarAssignment) {
                 Symbols variable = symbolTable.lookupVariable(var.getIdentifierName());
                 if (variable == null) {
                     System.out.println("ERROR ----> La variable " + var.getIdentifierName() + " no ha sido declarada.");
@@ -114,8 +113,8 @@ public class ClassObject {
             //TODO code generator
             symbolTable.emptyLocalList();
         }
-
-
-
+        //-------------******--------------
+        print();
     }
+
 }
