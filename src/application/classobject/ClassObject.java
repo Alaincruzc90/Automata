@@ -1,6 +1,10 @@
 package application.classobject;
 
 import application.assignment.ArrayAssignment;
+import application.assignment.Assignment;
+import application.assignment.IdentifierAssignment;
+import application.component.Component;
+import application.component.Return;
 import application.enums.VarType;
 import application.method.Func;
 import application.method.Method;
@@ -84,8 +88,21 @@ public class ClassObject {
             }
         }
 
+        for(VarStructure var : resultGlobals) {
+            if(var instanceof VarDeclarationAssignment) {
+                VarType assignmentVarType = ((VarDeclarationAssignment) var).getAssignment().getAssignmentType(symbolTable);
+                if(assignmentVarType != null){
+                    if(!((VarDeclarationAssignment) var).getVarType().equals(assignmentVarType)){
+                        throw new Exception(var.getIdentifierName() + ": asignación de tipo de datos diferente al requerido");
+                    }
+                }
+            } else if(var instanceof VarAssignment){
+                System.out.println(var.getIdentifierName() + " encontrada como VarAssignment");
+            }
+        }
+
         List methodList = new ArrayList(methods);
-        Collections.reverse(list);
+        Collections.reverse(methodList);
         Set<Method> resultMethods = new LinkedHashSet<>(methodList);
 
         for(Method method : resultMethods) {
@@ -97,6 +114,25 @@ public class ClassObject {
                     }
                 }
                 symbolTable.getGlobalSymbols().add(new Function(method.getIdentifier(), ((Func) method).getReturnType(), varTypes));
+
+                List localVarList = new ArrayList(method.getLocalVariables());
+                Collections.reverse(localVarList);
+                Set<VarStructure> localVariables = new LinkedHashSet<>(localVarList); //se guardan las variables locales en la tabla de simbolos
+
+                for(VarStructure locVar : localVariables){
+                    if(locVar instanceof VarDeclaration ) {
+                        symbolTable.getLocalSymbols().add(new Variable(locVar.getIdentifierName(), ((VarDeclaration) locVar).getVarType()));
+                    } else if (locVar instanceof VarDeclarationAssignment) {
+                        symbolTable.getLocalSymbols().add(new Variable(locVar.getIdentifierName(), ((VarDeclarationAssignment) locVar).getVarType()));
+                    } else if (locVar instanceof ArrayDeclaration) {
+                        symbolTable.getLocalSymbols().add(new ArraySymbols(locVar.getIdentifierName(), ((ArrayDeclaration) locVar).getVarType()));
+                    } else if (locVar instanceof VarAssignment) {
+                        Symbols variable = symbolTable.lookupVariable(locVar.getIdentifierName());
+                        if (variable == null) {
+                            System.out.println("ERROR ----> La variable " + locVar.getIdentifierName() + " no ha sido declarada.");
+                        }
+                    }
+                }
             } else {
                 List<VarType> varTypes = new LinkedList<>();
                 for(VarStructure var : method.getParameters()) {
@@ -105,8 +141,35 @@ public class ClassObject {
                     }
                 }
                 symbolTable.getGlobalSymbols().add(new Procedure(method.getIdentifier(), varTypes));
+
+                Set<VarStructure> localVariables = method.getLocalVariables(); //se guardan las variables locales en la tabla de simbolos
+                for(VarStructure locVar : localVariables){
+                    if(locVar instanceof VarDeclaration ) {
+                        symbolTable.getLocalSymbols().add(new Variable(locVar.getIdentifierName(), ((VarDeclaration) locVar).getVarType()));
+                    } else if (locVar instanceof VarDeclarationAssignment) {
+                        symbolTable.getLocalSymbols().add(new Variable(locVar.getIdentifierName(), ((VarDeclarationAssignment) locVar).getVarType()));
+                    } else if (locVar instanceof ArrayDeclaration) {
+                        symbolTable.getLocalSymbols().add(new ArraySymbols(locVar.getIdentifierName(), ((ArrayDeclaration) locVar).getVarType()));
+                    } else if (locVar instanceof VarAssignment) {
+                        Symbols variable = symbolTable.lookupVariable(locVar.getIdentifierName());
+                        if (variable == null) {
+                            System.out.println("ERROR ----> La variable " + locVar.getIdentifierName() + " no ha sido declarada.");
+                        }
+                    }
+                }
             }
         }
+        for(Method method2: resultMethods){
+            if(method2 instanceof Func){
+                if(!((Func) method2).checkReturnValueType(symbolTable)){
+                    throw new Exception("Error en tipo de retorno en función " + method2.getIdentifier());
+                }
+            }
+            if(!method2.checkParamsType(symbolTable)){
+                throw new Exception("Error en chequeo de parámetros en método " + method2.getIdentifier());
+            }
+        }
+
 
         for (Method method : methods) {
             method.fillLocalSymbols(symbolTable);

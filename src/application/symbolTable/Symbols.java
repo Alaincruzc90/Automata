@@ -1,5 +1,7 @@
 package application.symbolTable;
 
+import application.enums.VarType;
+
 public class Symbols {
 
     private String name;

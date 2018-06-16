@@ -34,4 +34,10 @@ public class CallAssignment implements Assignment {
     public boolean equalType(VarType varType) {
         return call.equalType(varType);
     }
+
+    @Override
+    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
+        System.out.println("CallAssignment->metodo");
+        return call.getAssignmentType(symbolTable);
+    }
 }

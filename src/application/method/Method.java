@@ -1,6 +1,7 @@
 package application.method;
 
 import application.classobject.ClassObject;
+import application.component.Call;
 import application.component.Component;
 import application.enums.MethodType;
 import application.symbolTable.ArraySymbols;
@@ -101,6 +102,21 @@ public class Method {
 
     public void setFather(ClassObject father) {
         this.father = father;
+    }
+
+    public boolean checkParamsType(SymbolTable symbolTable){ //todo
+        List<Call> callList = new LinkedList<>();
+        for(Component component: components){
+            if(component instanceof Call){
+                callList.add((Call) component);
+            }
+        }
+        if(!callList.isEmpty()){
+            for(Call call: callList){
+
+            }
+        }
+        return false;
     }
 
     public void print() {

@@ -49,4 +49,9 @@ public abstract class MathOperation implements Assignment {
     public boolean equalType(VarType varType) {
         return false;
     }
+
+    @Override
+    public VarType getAssignmentType(SymbolTable symbolTable) {
+        return null;
+    }
 }

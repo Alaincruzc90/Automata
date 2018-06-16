@@ -1,5 +1,6 @@
 package application.component;
 
+import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;

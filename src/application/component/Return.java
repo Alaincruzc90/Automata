@@ -42,4 +42,9 @@ public class Return extends Component implements Assignment {
     public boolean equalType(VarType varType) {
         return this.assignment.equalType(varType);
     }
+
+    @Override
+    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
+        return assignment.getAssignmentType(symbolTable);
+    }
 }

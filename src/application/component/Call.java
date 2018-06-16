@@ -39,6 +39,10 @@ public class Call extends Component implements Assignment {
         this.methodName = methodName;
     }
 
+    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
+        return parameter.getAssignmentType(symbolTable);
+    }
+
     @Override
     public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
         if(symbolTable.lookupFunc(this.methodName) == null && symbolTable.lookupProc(this.methodName) == null) {
@@ -58,5 +62,7 @@ public class Call extends Component implements Assignment {
     public boolean equalType(VarType varType) {
         return parameter.equalType(varType);
     }
+
+
 
 }

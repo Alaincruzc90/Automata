@@ -55,4 +55,10 @@ public class ArrayAssignment implements Assignment {
     public boolean equalType(VarType varType) {
         return value.equalType(varType);
     }
+
+    @Override
+    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
+        System.out.println("ArrayAssignment->metodo");
+        return value.getAssignmentType(symbolTable);
+    }
 }

@@ -1,7 +1,7 @@
 package application.assignment;
 
 import application.enums.VarType;
-import application.symbolTable.SymbolTable;
+import application.symbolTable.*;
 
 public class IdentifierAssignment implements Assignment {
 
@@ -34,5 +34,20 @@ public class IdentifierAssignment implements Assignment {
     @Override
     public boolean equalType(VarType varType) {
         return false;
+    }
+
+    @Override
+    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
+        System.out.println("IdentifierAssignment->metodo");
+        Symbols symbol = symbolTable.lookupVariable(this.getIdentifier());
+        if(symbol != null && symbol instanceof Variable) {
+            return ((Variable) symbol).getType();
+        } else{
+            symbol = symbolTable.lookupFunc(this.getIdentifier());
+            if(symbol != null && symbol instanceof Function){
+                return ((Function) symbol).getReturnValueType();
+            }
+        }
+        throw new Exception("La variable " + this.getIdentifier() + " no ha sido declarada.");
     }
 }

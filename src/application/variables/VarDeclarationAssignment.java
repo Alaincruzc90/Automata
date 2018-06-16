@@ -11,16 +11,8 @@ public class VarDeclarationAssignment extends VarStructure {
 
     public VarDeclarationAssignment(DeclarationType declarationType, String identifierName, VarType varType, Assignment assignment) {
         super(declarationType, identifierName);
-        try{
-            if(assignment.equalType(varType)){
-                this.varType = varType;
-                this.assignment = assignment;
-            } else {
-                System.out.println("error en el constructor de variable " + identifierName);
-            }
-        } catch (Exception e){
-            e.getMessage();
-        }
+        this.varType = varType;
+        this.assignment = assignment;
     }
 
     public VarType getVarType() {
