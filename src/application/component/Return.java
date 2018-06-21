@@ -1,6 +1,7 @@
 package application.component;
 
-import application.assignment.Assignment;
+import application.assignment.*;
+import application.assignment.math.MathOperation;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;

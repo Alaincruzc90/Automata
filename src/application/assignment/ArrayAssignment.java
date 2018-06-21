@@ -58,7 +58,6 @@ public class ArrayAssignment implements Assignment {
 
     @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
-        System.out.println("ArrayAssignment->metodo");
         return value.getAssignmentType(symbolTable);
     }
 }

@@ -114,7 +114,6 @@ public class DirectAssignment<K> implements Assignment {
 
     @Override
     public VarType getAssignmentType(SymbolTable symbolTable) {
-        System.out.println("DirectAssignment->metodo");
         String valueTypeStr = value.getClass().getSimpleName();
         if(!valueTypeStr.equalsIgnoreCase("float")){
             return VarType.INT;

@@ -76,16 +76,24 @@ proc drawTriangle params empty
 }
 
 // Sucesión de fibonacci.
-func fibonacci params int n return int
-{ 
-     if n < 2 then  //Condición de parada
+func fibonacci params int num return int
+{
+	define var {
+		char c;
+		int z;
+	}
+     if num < 2 then  //Condición de parada
      { 
      } 
     else  //Se obtienen los demás números de la sucesión
     {
           //Se llama a fibonacci con n-1 y n-2 de la siguiente forma: 
-          return call fibonacci with (n - 1) + call fibonacci with (n - 2);
+          return call fibonacci with (num - 1) + call fibonacci with (num - 2);
     }
+    //return c;
+    call fibonacci with (num - 1)
+    return -1;
+
 }
 
 }

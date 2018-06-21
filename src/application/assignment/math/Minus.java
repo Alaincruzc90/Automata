@@ -1,6 +1,7 @@
 package application.assignment.math;
 
 import application.assignment.Assignment;
+import application.enums.VarType;
 
 public class Minus extends MathOperation {
 
@@ -15,4 +16,6 @@ public class Minus extends MathOperation {
     public <K> K operation() {
         return null;
     }
+
+
 }

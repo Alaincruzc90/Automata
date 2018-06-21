@@ -1,10 +1,15 @@
 package application.component;
 
-import application.assignment.Assignment;
+import application.assignment.*;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symbolTable.*;
+import application.variables.VarStructure;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class Call extends Component implements Assignment {
 
@@ -41,6 +46,42 @@ public class Call extends Component implements Assignment {
 
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
         return parameter.getAssignmentType(symbolTable);
+    }
+
+    public void checkParameterList(SymbolTable symbolTable, String methodName, Set<VarStructure> parameter) throws Exception{
+        if(parameter != null && parameter.size() > 0){
+
+            List<VarStructure> paramList = new LinkedList<>();
+            for(VarStructure var: parameter){
+                paramList.add(var);
+            }
+
+            Symbols symbol = symbolTable.lookupFunc(methodName);
+            if(symbol == null){
+                symbol = symbolTable.lookupProc(methodName);
+            }
+            if(symbol != null){
+                List<VarType> assignedParameterList = new LinkedList<>();
+                if(symbol instanceof Function){
+                    assignedParameterList = ((Function) symbol).getVarTypes();
+                }
+                if(symbol instanceof Procedure){
+                    assignedParameterList = ((Procedure) symbol).getVarTypes();
+                }
+
+                VarType varType;
+                String name;
+                for(int i = 0; i < assignedParameterList.size(); i++){
+                    name = paramList.get(i).getIdentifierName();
+                    symbol = symbolTable.lookupVariable(name);
+                    if(symbol != null && symbol instanceof Variable){
+                        if(!((Variable) symbol).getType().equals(this.parameter.getAssignmentType(symbolTable))){
+                            throw new Exception("Error: parámetros diferentes a los definidos en " + methodName);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override

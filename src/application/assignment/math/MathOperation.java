@@ -1,6 +1,7 @@
 package application.assignment.math;
 
 import application.assignment.Assignment;
+import application.assignment.IdentifierAssignment;
 import application.enums.VarType;
 import application.symbolTable.SymbolTable;
 
@@ -51,7 +52,10 @@ public abstract class MathOperation implements Assignment {
     }
 
     @Override
-    public VarType getAssignmentType(SymbolTable symbolTable) {
+    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
+        if(leftAssignment.getAssignmentType(symbolTable).equals(rightAssignment.getAssignmentType(symbolTable))){
+            return leftAssignment.getAssignmentType(symbolTable);
+        }
         return null;
     }
 }

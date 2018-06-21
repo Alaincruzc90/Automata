@@ -28,7 +28,7 @@ public class Func extends Method {
         List<Component> list = this.getComponents();
         for(Component component: list) {
             if(component instanceof Return){
-                return ((Return) component).getValue().getAssignmentType(symbolTable).equals(returnType);
+                return ((Return) component).getValue().getAssignmentType(symbolTable).equals(this.getReturnType());
             }
         }
         return false;

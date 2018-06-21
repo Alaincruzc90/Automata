@@ -38,7 +38,6 @@ public class IdentifierAssignment implements Assignment {
 
     @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
-        System.out.println("IdentifierAssignment->metodo");
         Symbols symbol = symbolTable.lookupVariable(this.getIdentifier());
         if(symbol != null && symbol instanceof Variable) {
             return ((Variable) symbol).getType();

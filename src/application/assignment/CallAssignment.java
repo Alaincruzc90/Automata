@@ -37,7 +37,6 @@ public class CallAssignment implements Assignment {
 
     @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
-        System.out.println("CallAssignment->metodo");
         return call.getAssignmentType(symbolTable);
     }
 }

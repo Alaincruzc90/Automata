@@ -3,6 +3,7 @@ package application.classobject;
 import application.assignment.ArrayAssignment;
 import application.assignment.Assignment;
 import application.assignment.IdentifierAssignment;
+import application.component.Call;
 import application.component.Component;
 import application.component.Return;
 import application.enums.VarType;
@@ -111,6 +112,7 @@ public class ClassObject {
                 for(VarStructure var : method.getParameters()) {
                     if(var instanceof VarDeclaration) {
                         varTypes.add(((VarDeclaration) var).getVarType());
+                        symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
                     }
                 }
                 symbolTable.getGlobalSymbols().add(new Function(method.getIdentifier(), ((Func) method).getReturnType(), varTypes));
@@ -159,14 +161,18 @@ public class ClassObject {
                 }
             }
         }
+        List<Component> listOfComponents;
         for(Method method2: resultMethods){
             if(method2 instanceof Func){
                 if(!((Func) method2).checkReturnValueType(symbolTable)){
                     throw new Exception("Error en tipo de retorno en función " + method2.getIdentifier());
                 }
             }
-            if(!method2.checkParamsType(symbolTable)){
-                throw new Exception("Error en chequeo de parámetros en método " + method2.getIdentifier());
+            listOfComponents = method2.getComponents();
+            for(Component callComponent: listOfComponents){
+                if(callComponent instanceof Call){
+                    ((Call) callComponent).checkParameterList(symbolTable, ((Call) callComponent).getMethodName(), method2.getParameters());
+                }
             }
         }
 

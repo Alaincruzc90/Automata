@@ -3,6 +3,7 @@ package application.method;
 import application.classobject.ClassObject;
 import application.component.Call;
 import application.component.Component;
+import application.enums.DeclarationType;
 import application.enums.MethodType;
 import application.symbolTable.ArraySymbols;
 import application.symbolTable.SymbolTable;
@@ -15,7 +16,7 @@ import java.util.*;
 public class Method {
 
     private String identifier;
-    private Set<VarStructure> parameters;
+    private Set<VarStructure> parameters;//Es importante conocer el orden de los parametros
     private Set<VarStructure> localVariables;
     private List<Component> components;
     private MethodType methodType;
