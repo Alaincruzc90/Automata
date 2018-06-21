@@ -1,6 +1,7 @@
 package application.component;
 
 import application.assignment.Assignment;
+import application.assignment.IdentifierAssignment;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;
@@ -52,6 +53,19 @@ public class For extends ComponentBlock {
         this.actual = actual;
     }
 
+    public void checkType(SymbolTable symbolTable) throws Exception{
+        if(!this.getActual().getAssignmentType(symbolTable).equals(VarType.INT)){
+            throw new Exception("Error: los valores en " + this.getClass().getSimpleName() + " deben ser de tipo INT");
+        } else if(!this.getStripe().getAssignmentType(symbolTable).equals(VarType.INT)){
+            throw new Exception("Error: los valores en " + this.getClass().getSimpleName() + " deben ser de tipo INT");
+        } else if(!this.getMaxValue().getAssignmentType(symbolTable).equals(VarType.INT)){
+            throw new Exception("Error: los valores en " + this.getClass().getSimpleName() + " deben ser de tipo INT");
+        }
+        for(Component component: this.getComponents()){
+            component.checkType(symbolTable);
+        }
+    }
+
     @Override
     public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
         maxValue.checkSymbolTable(symbolTable);
@@ -65,8 +79,5 @@ public class For extends ComponentBlock {
         super.typeCheck(symbolTable, name);
     }
 
-    @Override
-    public boolean equalType(VarType varType) {
-        return super.equalType(varType);
-    }
+
 }

@@ -104,6 +104,8 @@ public class Call extends Component implements Assignment {
         return parameter.equalType(varType);
     }
 
-
-
+    @Override
+    public void checkType(SymbolTable symbolTable) throws Exception {
+        //implementado usando metodos propios de la clase
+    }
 }

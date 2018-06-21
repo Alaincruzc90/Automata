@@ -45,5 +45,5 @@ public abstract class Component {
 
     public abstract void typeCheck(SymbolTable symbolTable, String name) throws Exception;
 
-    public abstract boolean equalType(VarType varType);
+    public abstract void checkType(SymbolTable symbolTable) throws Exception;
 }

@@ -39,7 +39,9 @@ public class Print extends Component {
     }
 
     @Override
-    public boolean equalType(VarType varType) {
-        return false;
+    public void checkType(SymbolTable symbolTable) throws Exception {
+        if(this.getText().getAssignmentType(symbolTable).equals(VarType.LIST)){
+            throw new Exception("Error: tipo de dato Lista no válido en Print");
+        }
     }
 }

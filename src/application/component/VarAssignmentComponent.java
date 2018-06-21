@@ -52,7 +52,7 @@ public class VarAssignmentComponent extends Component {
     }
 
     @Override
-    public boolean equalType(VarType varType) {
-        return this.assignment.equalType(varType);
+    public void checkType(SymbolTable symbolTable) throws Exception {
+        //implementado usando metodos propios de la clase
     }
 }

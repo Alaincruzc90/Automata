@@ -97,8 +97,6 @@ public class ClassObject {
                         throw new Exception(var.getIdentifierName() + ": asignación de tipo de datos diferente al requerido");
                     }
                 }
-            } else if(var instanceof VarAssignment){
-                System.out.println(var.getIdentifierName() + " encontrada como VarAssignment");
             }
         }
 
@@ -161,27 +159,35 @@ public class ClassObject {
                 }
             }
         }
+
         List<Component> listOfComponents;
-        for(Method method2: resultMethods){
-            if(method2 instanceof Func){
-                if(!((Func) method2).checkReturnValueType(symbolTable)){
-                    throw new Exception("Error en tipo de retorno en función " + method2.getIdentifier());
+        for(Method method: resultMethods){
+            if(method instanceof Func){
+                if(!((Func) method).checkReturnValueType(symbolTable)){
+                    throw new Exception("Error en tipo de retorno en función " + method.getIdentifier());
                 }
             }
-            listOfComponents = method2.getComponents();
+            listOfComponents = method.getComponents();
             for(Component callComponent: listOfComponents){
                 if(callComponent instanceof Call){
-                    ((Call) callComponent).checkParameterList(symbolTable, ((Call) callComponent).getMethodName(), method2.getParameters());
+                    ((Call) callComponent).checkParameterList(symbolTable, ((Call) callComponent).getMethodName(), method.getParameters());
                 }
             }
         }
 
+        List<Component> componentList;
+        for(Method method: this.methods){
+            componentList = method.getComponents();
+            for(Component component: componentList){
+                component.checkType(symbolTable);
+            }
+        }
 
-        for (Method method : methods) {
+        /*for (Method method : methods) {
             method.fillLocalSymbols(symbolTable);
             //TODO code generator
             symbolTable.emptyLocalList();
-        }
+        }*/
         //-------------******--------------
         print();
     }

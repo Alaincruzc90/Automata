@@ -14,22 +14,23 @@ func eratosthenes params int n return List
   define var 
   {
   // arreglo de booleanos de tamaño n y se inicializa en true
-      Array boolean numeric_table size n;   
+      Array boolean numeric_table size n;
       int index = 0;
   // arreglo dinámico para guardar los números primos y se recorre el arreglo con dos ciclos anidados
       List int prime_numbers;
+      char cf;
       index = 0;  // se reinicia en uno
       int i = 0;  // se define e inicializa un entero para el for dentro del while
  
   }
  
-  for index to n  increase 1  // se cambia a true a partir de índice 2
+  for index to n increase 1  // se cambia a true a partir de índice 2
   {
       numeric_table pos index + 1 = true;
-  }  
+  }
  
  
-  while index < n    // recorre todo el arreglo 
+  while index < n    // recorre todo el arreglo
   {
         // si el número no ha sido marcado se agrega a la lista de números primos
          if numeric_table pos index + 1 equals true then   
@@ -54,6 +55,7 @@ proc drawTriangle params empty
 	//Se definen las variables
 	define var {
 		char c;
+		List int nums;
 		int n;
 		int numCharacter = 1;
 	}
@@ -67,7 +69,7 @@ proc drawTriangle params empty
 	//Se dibuja el triángulo rectangulo
 	for numCharacter to n increase 1
 	{
-		for 1 to numCharacter increase 1 
+		for 1 to numCharacter increase 2
 		{
 			print c;
 		}

@@ -48,4 +48,9 @@ public class Return extends Component implements Assignment {
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
         return assignment.getAssignmentType(symbolTable);
     }
+
+    @Override
+    public void checkType(SymbolTable symbolTable) throws Exception {
+        //implementado usando metodos propios de la clase
+    }
 }
