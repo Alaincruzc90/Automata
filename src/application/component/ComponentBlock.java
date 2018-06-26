@@ -58,26 +58,9 @@ public class ComponentBlock extends Component {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-
-    }
-
-    @Override
-    public void checkType(SymbolTable symbolTable) throws Exception {
-        System.out.println("bloque de codigo");
-        for(Component component: this.getComponents()){
-            component.checkType(symbolTable);
-            /*if(component instanceof Else){
-                component.checkType(symbolTable);
-            } else if(component instanceof ElseIf){
-                component.checkType(symbolTable);
-            } else if(component instanceof For){
-
-            } else if(component instanceof If){
-
-            } else if(component instanceof While){
-
-            }*/
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
+        for(Component component: components){
+            component.checkType(symbolTable, methodName);
         }
     }
 }

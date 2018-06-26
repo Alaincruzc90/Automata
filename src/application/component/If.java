@@ -41,15 +41,15 @@ public class If extends ComponentBlock {
         this.elseComponent = elseComponent;
     }
 
-    public void checkType(SymbolTable symbolTable) throws Exception{
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception{
         if(this.condition.getLeftEntry() != null && this.condition.getRightEntry() != null){
             if(!this.condition.getLeftEntry().getAssignmentType(symbolTable).equals(this.condition.getRightEntry().getAssignmentType(symbolTable))){
-                throw new Exception("Error: comparación de tipos diferentes en If");
+                throw new Exception("Error en "+ methodName + ": comparación de tipos diferentes en if");
             }
-            this.elseComponent.checkType(symbolTable);
-            for(Component component: this.getComponents()){
-                component.checkType(symbolTable);
+            if(this.elseComponent != null){
+                this.elseComponent.checkType(symbolTable, methodName);
             }
+            super.checkType(symbolTable, methodName);
         } else {
             //throw new Exception("Error: valor no asignado en condicional " + this.getClass().getSimpleName());
         }
@@ -60,11 +60,6 @@ public class If extends ComponentBlock {
         condition.checkSymbolTable(symbolTable);
         super.checkSymbolTable(symbolTable);
         if (elseComponent != null) elseComponent.checkSymbolTable(symbolTable);
-    }
-
-    @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-        super.typeCheck(symbolTable, name);
     }
 
 }

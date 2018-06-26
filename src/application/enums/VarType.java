@@ -11,43 +11,33 @@ public enum VarType {
     LIST;
 
     public boolean equals(VarType varType){
+        boolean isEqual = false;
         if(varType == VarType.INT && VarType.INT == this){
-            return true;
+            isEqual = true;
+        }else if(varType == VarType.INT && VarType.DOUBLE == this){
+            isEqual = true;
+        }else if(varType == VarType.DOUBLE && VarType.INT == this){
+            isEqual = true;
+        }else if(varType == VarType.DOUBLE && VarType.DOUBLE == this){
+            isEqual = true;
+        }else if(varType == VarType.INT && VarType.FLOAT == this){
+            isEqual = true;
+        }else if(varType == VarType.FLOAT && VarType.INT == this){
+            isEqual = true;
+        }else if(varType == VarType.FLOAT && VarType.FLOAT == this){
+            isEqual = true;
+        }else if(varType == VarType.STRING && VarType.STRING == this){
+            isEqual = true;
+        }else if(varType == VarType.LIST && VarType.LIST == this){
+            isEqual = true;
+        }else if(varType == VarType.BOOLEAN && VarType.BOOLEAN == this){
+            isEqual = true;
+        }else if(varType == VarType.ARRAY && VarType.ARRAY == this){
+            isEqual = true;
+        }else if(varType == VarType.CHAR && VarType.CHAR == this){
+            isEqual = true;
         }
-        if(varType == VarType.INT && VarType.DOUBLE == this){
-            return true;
-        }
-        if(varType == VarType.DOUBLE && VarType.INT == this){
-            return true;
-        }
-        if(varType == VarType.DOUBLE && VarType.DOUBLE == this){
-            return true;
-        }
-        if(varType == VarType.INT && VarType.FLOAT == this){
-            return true;
-        }
-        if(varType == VarType.FLOAT && VarType.INT == this){
-            return true;
-        }
-        if(varType == VarType.FLOAT && VarType.FLOAT == this){
-            return true;
-        }
-        if(varType == VarType.STRING && VarType.STRING == this){
-            return true;
-        }
-        if(varType == VarType.LIST && VarType.LIST == this){
-            return true;
-        }
-        if(varType == VarType.BOOLEAN && VarType.BOOLEAN == this){
-            return true;
-        }
-        if(varType == VarType.ARRAY && VarType.ARRAY == this){
-            return true;
-        }
-        if(varType == VarType.CHAR && VarType.CHAR == this){
-            return true;
-        }
-        return false;
+        return isEqual;
     }
 
 }

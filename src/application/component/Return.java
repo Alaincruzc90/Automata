@@ -4,8 +4,11 @@ import application.assignment.*;
 import application.assignment.math.MathOperation;
 import application.enums.ComponentType;
 import application.enums.VarType;
+import application.method.Func;
 import application.method.Method;
+import application.symbolTable.Function;
 import application.symbolTable.SymbolTable;
+import application.symbolTable.Symbols;
 
 public class Return extends Component implements Assignment {
 
@@ -35,22 +38,27 @@ public class Return extends Component implements Assignment {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-        this.assignment.typeCheck(symbolTable, name);
-    }
-
-    @Override
-    public boolean equalType(VarType varType) {
-        return this.assignment.equalType(varType);
-    }
-
-    @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
         return assignment.getAssignmentType(symbolTable);
     }
 
     @Override
-    public void checkType(SymbolTable symbolTable) throws Exception {
-        //implementado usando metodos propios de la clase
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
+        Symbols symbol = symbolTable.lookupFunc(methodName);
+        if(symbol != null) {
+            VarType returnValueType = ((Function) symbol).getReturnValueType();
+            if(returnValueType != null){
+                if(! returnValueType.equals(this.getValue().getAssignmentType(symbolTable))){
+                    throw new Exception("La función " + methodName + " tiene un tipo de retorno no válido");
+                }
+            }
+        } else {
+            symbol = symbolTable.lookupProc(methodName);
+            if(symbol != null){
+                throw new Exception("Error: Return en procedimiento " + methodName);
+            } else {
+                throw new Exception("El método" + methodName + " no fue encontrado en la tabla de símbolos");
+            }
+        }
     }
 }

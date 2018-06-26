@@ -27,16 +27,6 @@ public class IdentifierAssignment implements Assignment {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-        //System.out.println("revisando tipo de dato");
-    }
-
-    @Override
-    public boolean equalType(VarType varType) {
-        return false;
-    }
-
-    @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
         Symbols symbol = symbolTable.lookupVariable(this.getIdentifier());
         if(symbol != null && symbol instanceof Variable) {

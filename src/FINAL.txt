@@ -24,9 +24,9 @@ func eratosthenes params int n return List
  
   }
  
-  for index to n increase 1  // se cambia a true a partir de índice 2
+  for index to n increase cf  // se cambia a true a partir de índice 2
   {
-      numeric_table pos index + 1 = true;
+      //numeric_table pos index + 1 = true;
   }
  
  
@@ -35,14 +35,14 @@ func eratosthenes params int n return List
         // si el número no ha sido marcado se agrega a la lista de números primos
          if numeric_table pos index + 1 equals true then   
          {
-                 prime_numbers insert index + 1;
+                 //prime_numbers insert index + 1;
          }
  
           i = index;
          // marca todos los múltiplos de cada índice
          for  i to n increase index     
          {
-                 numeric_table pos i + 1 = false;
+                 //numeric_table pos i + 1 = false;
          }
          index = index + 1; // se aumenta el contador
    }
@@ -71,6 +71,7 @@ proc drawTriangle params empty
 	{
 		for 1 to numCharacter increase 2
 		{
+		    //return c;
 			print c;
 		}
 		print "\n";
@@ -85,16 +86,23 @@ func fibonacci params int num return int
 		int z;
 	}
      if num < 2 then  //Condición de parada
-     { 
-     } 
+     {
+        if num > 0 then
+        {
+            if num <= 0 then
+            {
+                z = 9;
+            }
+        }
+     }
     else  //Se obtienen los demás números de la sucesión
     {
           //Se llama a fibonacci con n-1 y n-2 de la siguiente forma: 
           return call fibonacci with (num - 1) + call fibonacci with (num - 2);
     }
     //return c;
-    call fibonacci with (num - 1)
-    return -1;
+    //call fibonacci with z
+    return call fibonacci with (num - 1) + call fibonacci with (num - 2);
 
 }
 

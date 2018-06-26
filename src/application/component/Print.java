@@ -34,14 +34,9 @@ public class Print extends Component {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-
-    }
-
-    @Override
-    public void checkType(SymbolTable symbolTable) throws Exception {
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
         if(this.getText().getAssignmentType(symbolTable).equals(VarType.LIST)){
-            throw new Exception("Error: tipo de dato Lista no válido en Print");
+            throw new Exception("Error en " + methodName + ": tipo de dato Lista no válido en Print");
         }
     }
 }

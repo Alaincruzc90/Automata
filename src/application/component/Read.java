@@ -34,12 +34,7 @@ public class Read extends Component {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-
-    }
-
-    @Override
-    public void checkType(SymbolTable symbolTable) throws Exception {
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
         //implementado usando metodos propios de la clase
     }
 }

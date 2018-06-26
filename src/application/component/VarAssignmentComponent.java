@@ -4,7 +4,10 @@ import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;
+import application.symbolTable.ArraySymbols;
 import application.symbolTable.SymbolTable;
+import application.symbolTable.Symbols;
+import application.symbolTable.Variable;
 
 public class VarAssignmentComponent extends Component {
 
@@ -47,12 +50,19 @@ public class VarAssignmentComponent extends Component {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-        this.assignment.typeCheck(symbolTable, this.identifierName);
-    }
-
-    @Override
-    public void checkType(SymbolTable symbolTable) throws Exception {
-        //implementado usando metodos propios de la clase
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
+        Symbols symbol = symbolTable.lookupVariable(this.getIdentifierName());
+        if(symbol != null){
+            VarType symbolVarType = null;
+            if(symbol instanceof Variable){
+                symbolVarType = ((Variable) symbol).getType();
+            }
+            if(symbol instanceof ArraySymbols){
+                symbolVarType = ((ArraySymbols) symbol).getType();
+            }
+            if(symbolVarType != null && !symbolVarType.equals(this.getAssignment().getAssignmentType(symbolTable))){
+                throw new Exception("Error en "+ methodName + ": el tipo de dato asignado es diferente al requerido en variable " + symbol.getName());
+            }
+        }
     }
 }

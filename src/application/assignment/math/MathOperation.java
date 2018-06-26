@@ -42,16 +42,6 @@ public abstract class MathOperation implements Assignment {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-
-    }
-
-    @Override
-    public boolean equalType(VarType varType) {
-        return false;
-    }
-
-    @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
         if(leftAssignment.getAssignmentType(symbolTable).equals(rightAssignment.getAssignmentType(symbolTable))){
             return leftAssignment.getAssignmentType(symbolTable);

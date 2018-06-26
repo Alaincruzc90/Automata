@@ -16,9 +16,7 @@ public class Else extends ComponentBlock {
         super(type, components);
     }
 
-    public void checkType(SymbolTable symbolTable) throws Exception{
-        for(Component component: this.getComponents()){
-            component.checkType(symbolTable);
-        }
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception{
+        super.checkType(symbolTable, methodName);
     }
 }

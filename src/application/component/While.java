@@ -29,16 +29,14 @@ public class While extends ComponentBlock {
         this.condition = condition;
     }
 
-    public void checkType(SymbolTable symbolTable) throws Exception{
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception{
         if(this.condition.getLeftEntry() != null && this.condition.getRightEntry() != null) {
             if (!this.condition.getLeftEntry().getAssignmentType(symbolTable).equals(this.condition.getRightEntry().getAssignmentType(symbolTable))) {
-                throw new Exception("Error: comparación de tipos diferentes en " + this.getClass().getSimpleName());
+                throw new Exception("Error en " + methodName +": comparación de tipos diferentes en " + this.getClass().getSimpleName());
             }
-            for (Component component : this.getComponents()) {
-                component.checkType(symbolTable);
-            }
+            super.checkType(symbolTable, methodName);
         } else {
-            throw new Exception("Error: valor no asignado en condicional " + this.getClass().getSimpleName());
+            throw new Exception("Error en "+ methodName + ": valor no asignado en condicional " + this.getClass().getSimpleName());
         }
     }
 

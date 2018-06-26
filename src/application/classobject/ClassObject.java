@@ -1,11 +1,6 @@
 package application.classobject;
 
-import application.assignment.ArrayAssignment;
-import application.assignment.Assignment;
-import application.assignment.IdentifierAssignment;
-import application.component.Call;
 import application.component.Component;
-import application.component.Return;
 import application.enums.VarType;
 import application.method.Func;
 import application.method.Method;
@@ -56,7 +51,7 @@ public class ClassObject {
         System.out.println("Clase -> " + this.name);
         String space = "    ";
         for (VarStructure var:
-             globalVariables) {
+                globalVariables) {
             if(var instanceof VarAssignment) {
                 System.out.println("Assignación de variable -> " + var.getIdentifierName());
             } else {
@@ -74,6 +69,7 @@ public class ClassObject {
         Collections.reverse(list);
         Set<VarStructure> resultGlobals = new LinkedHashSet<>(list);
 
+        //inserta las variales globales en la tabla de símbolos
         for(VarStructure var : resultGlobals) {
             if(var instanceof VarDeclaration ) {
                 symbolTable.getGlobalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
@@ -82,6 +78,7 @@ public class ClassObject {
             } else if (var instanceof ArrayDeclaration) {
                 symbolTable.getGlobalSymbols().add(new ArraySymbols(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
             } else if (var instanceof VarAssignment) {
+                // NO entra ---------------
                 Symbols variable = symbolTable.lookupVariable(var.getIdentifierName());
                 if (variable == null) {
                     System.out.println("ERROR ----> La variable " + var.getIdentifierName() + " no ha sido declarada.");
@@ -89,12 +86,31 @@ public class ClassObject {
             }
         }
 
+        //se revisa que las asignaciones sean del tipo adecuado según fueron declaradas
         for(VarStructure var : resultGlobals) {
             if(var instanceof VarDeclarationAssignment) {
                 VarType assignmentVarType = ((VarDeclarationAssignment) var).getAssignment().getAssignmentType(symbolTable);
                 if(assignmentVarType != null){
                     if(!((VarDeclarationAssignment) var).getVarType().equals(assignmentVarType)){
                         throw new Exception(var.getIdentifierName() + ": asignación de tipo de datos diferente al requerido");
+                    }
+                }
+            } else if(var instanceof VarAssignment){
+                VarType assignmentType = ((VarAssignment) var).getAssignment().getAssignmentType(symbolTable);
+                if(assignmentType != null){
+                    Symbols symbol = symbolTable.lookupVariable(var.getIdentifierName());
+                    if(symbol != null){
+                        VarType symbolVarType = null;
+                        if(symbol instanceof Variable){
+                            symbolVarType = ((Variable) symbol).getType();
+                        } else if(symbol instanceof ArraySymbols){
+                            symbolVarType = ((ArraySymbols) symbol).getType();
+                        }
+                        if(symbolVarType != null){
+                            if(! ((VarAssignment) var).getAssignment().getAssignmentType(symbolTable).equals(symbolVarType)){
+                                throw new Exception(var.getIdentifierName() + ": asignación de tipo de datos diferente al requerido");
+                            }
+                        }
                     }
                 }
             }
@@ -104,7 +120,9 @@ public class ClassObject {
         Collections.reverse(methodList);
         Set<Method> resultMethods = new LinkedHashSet<>(methodList);
 
+        //se diferencia entre funciones y procedimientos
         for(Method method : resultMethods) {
+            //Se agregan las funciones
             if(method instanceof Func) {
                 List<VarType> varTypes = new LinkedList<>();
                 for(VarStructure var : method.getParameters()) {
@@ -129,11 +147,42 @@ public class ClassObject {
                     } else if (locVar instanceof VarAssignment) {
                         Symbols variable = symbolTable.lookupVariable(locVar.getIdentifierName());
                         if (variable == null) {
-                            System.out.println("ERROR ----> La variable " + locVar.getIdentifierName() + " no ha sido declarada.");
+                            System.out.println("ERROR ----> La variable " + locVar.getIdentifierName() + " no ha sido declarada en " + method.getIdentifier());
+                        }
+                    }
+                }
+
+                //se revisa que las asignaciones sean del tipo adecuado según fueron declaradas en la función
+                for(VarStructure var : localVariables) {
+                    if(var instanceof VarDeclarationAssignment) {
+                        VarType assignmentVarType = ((VarDeclarationAssignment) var).getAssignment().getAssignmentType(symbolTable);
+                        if(assignmentVarType != null){
+                            if(!((VarDeclarationAssignment) var).getVarType().equals(assignmentVarType)){
+                                throw new Exception("En " + method.getIdentifier() + ". " + var.getIdentifierName() + ": asignación de tipo de datos diferente al requerido");
+                            }
+                        }
+                    } else if(var instanceof VarAssignment){
+                        VarType assignmentType = ((VarAssignment) var).getAssignment().getAssignmentType(symbolTable);
+                        if(assignmentType != null){
+                            Symbols symbol = symbolTable.lookupVariable(var.getIdentifierName());
+                            if(symbol != null){
+                                VarType symbolVarType = null;
+                                if(symbol instanceof Variable){
+                                    symbolVarType = ((Variable) symbol).getType();
+                                } else if(symbol instanceof ArraySymbols){
+                                    symbolVarType = ((ArraySymbols) symbol).getType();
+                                }
+                                if(symbolVarType != null){
+                                    if(! ((VarAssignment) var).getAssignment().getAssignmentType(symbolTable).equals(symbolVarType)){
+                                        throw new Exception("En " + method.getIdentifier() + ". " + var.getIdentifierName() + ": asignación de tipo de datos diferente al requerido");
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             } else {
+                //se agregan los procedimientos
                 List<VarType> varTypes = new LinkedList<>();
                 for(VarStructure var : method.getParameters()) {
                     if(var instanceof VarDeclaration) {
@@ -153,42 +202,52 @@ public class ClassObject {
                     } else if (locVar instanceof VarAssignment) {
                         Symbols variable = symbolTable.lookupVariable(locVar.getIdentifierName());
                         if (variable == null) {
-                            System.out.println("ERROR ----> La variable " + locVar.getIdentifierName() + " no ha sido declarada.");
+                            System.out.println("ERROR ----> La variable " + locVar.getIdentifierName() + " no ha sido declarada en " + method.getIdentifier());
+                        }
+                    }
+                }
+
+                //se revisa que las asignaciones sean del tipo adecuado según fueron declaradas en el procedimiento
+                for(VarStructure var : localVariables) {
+                    if(var instanceof VarDeclarationAssignment) {
+                        VarType assignmentVarType = ((VarDeclarationAssignment) var).getAssignment().getAssignmentType(symbolTable);
+                        if(assignmentVarType != null){
+                            if(!((VarDeclarationAssignment) var).getVarType().equals(assignmentVarType)){
+                                throw new Exception("En " + method.getIdentifier() + ". " + var.getIdentifierName() + ": asignación de tipo de datos diferente al requerido");
+                            }
+                        }
+                    } else if(var instanceof VarAssignment){
+                        VarType assignmentType = ((VarAssignment) var).getAssignment().getAssignmentType(symbolTable);
+                        if(assignmentType != null){
+                            Symbols symbol = symbolTable.lookupVariable(var.getIdentifierName());
+                            if(symbol != null){
+                                VarType symbolVarType = null;
+                                if(symbol instanceof Variable){
+                                    symbolVarType = ((Variable) symbol).getType();
+                                } else if(symbol instanceof ArraySymbols){
+                                    symbolVarType = ((ArraySymbols) symbol).getType();
+                                }
+                                if(symbolVarType != null){
+                                    if(! ((VarAssignment) var).getAssignment().getAssignmentType(symbolTable).equals(symbolVarType)){
+                                        throw new Exception("En " + method.getIdentifier() + ". " + var.getIdentifierName() + ": asignación de tipo de datos diferente al requerido");
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
 
-        List<Component> listOfComponents;
-        for(Method method: resultMethods){
-            if(method instanceof Func){
-                if(!((Func) method).checkReturnValueType(symbolTable)){
-                    throw new Exception("Error en tipo de retorno en función " + method.getIdentifier());
-                }
+            //chequeo de componentes de cada método
+            List<Component> components = method.getComponents();
+            for(Component var: components){
+                var.checkType(symbolTable, method.getIdentifier());
             }
-            listOfComponents = method.getComponents();
-            for(Component callComponent: listOfComponents){
-                if(callComponent instanceof Call){
-                    ((Call) callComponent).checkParameterList(symbolTable, ((Call) callComponent).getMethodName(), method.getParameters());
-                }
-            }
-        }
 
-        List<Component> componentList;
-        for(Method method: this.methods){
-            componentList = method.getComponents();
-            for(Component component: componentList){
-                component.checkType(symbolTable);
-            }
-        }
-
-        /*for (Method method : methods) {
-            method.fillLocalSymbols(symbolTable);
-            //TODO code generator
+            //Vacía la tabla de símbolos local
             symbolTable.emptyLocalList();
-        }*/
-        //-------------******--------------
+        }
+        //+++++++++++++++++++++++
         print();
     }
 

@@ -76,7 +76,7 @@ public class Call extends Component implements Assignment {
                     symbol = symbolTable.lookupVariable(name);
                     if(symbol != null && symbol instanceof Variable){
                         if(!((Variable) symbol).getType().equals(this.parameter.getAssignmentType(symbolTable))){
-                            throw new Exception("Error: parámetros diferentes a los definidos en " + methodName);
+                            throw new Exception("Error en " + methodName + ": call llamado con parámetro no válido");
                         }
                     }
                 }
@@ -95,17 +95,25 @@ public class Call extends Component implements Assignment {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-        parameter.typeCheck(symbolTable, this.methodName);
-    }
-
-    @Override
-    public boolean equalType(VarType varType) {
-        return parameter.equalType(varType);
-    }
-
-    @Override
-    public void checkType(SymbolTable symbolTable) throws Exception {
-        //implementado usando metodos propios de la clase
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
+        Symbols symbol = symbolTable.lookupFunc(methodName);
+        if(symbol != null){
+            List<VarType> parameters = ((Function) symbol).getVarTypes();
+            if(parameters.size() == 1){
+                if( !parameters.get(0).equals(this.getParameter().getAssignmentType(symbolTable))){
+                    throw new Exception("Error: parametro inválido en " + methodName);
+                }
+            }
+        } else {
+            symbol = symbolTable.lookupProc(methodName);
+            if(symbol != null){
+                List<VarType> parameters = ((Procedure) symbol).getVarTypes();
+                if(parameters.size() == 1){
+                    if( !parameters.get(0).equals(this.getParameter().getAssignmentType(symbolTable))){
+                        throw new Exception("Error: parametro inválido en " + methodName);
+                    }
+                }
+            }
+        }
     }
 }

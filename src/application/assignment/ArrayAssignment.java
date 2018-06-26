@@ -47,16 +47,6 @@ public class ArrayAssignment implements Assignment {
     }
 
     @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-        value.typeCheck(symbolTable, name);
-    }
-
-    @Override
-    public boolean equalType(VarType varType) {
-        return value.equalType(varType);
-    }
-
-    @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
         return value.getAssignmentType(symbolTable);
     }

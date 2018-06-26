@@ -53,17 +53,15 @@ public class For extends ComponentBlock {
         this.actual = actual;
     }
 
-    public void checkType(SymbolTable symbolTable) throws Exception{
+    public void checkType(SymbolTable symbolTable, String methodName) throws Exception{
         if(!this.getActual().getAssignmentType(symbolTable).equals(VarType.INT)){
-            throw new Exception("Error: los valores en " + this.getClass().getSimpleName() + " deben ser de tipo INT");
+            throw new Exception("Error en "+ methodName+ ": los valores en " + this.getClass().getSimpleName() + " deben ser de tipo int");
         } else if(!this.getStripe().getAssignmentType(symbolTable).equals(VarType.INT)){
-            throw new Exception("Error: los valores en " + this.getClass().getSimpleName() + " deben ser de tipo INT");
+            throw new Exception("Error en "+ methodName+ ": los valores en " + this.getClass().getSimpleName() + " deben ser de tipo int");
         } else if(!this.getMaxValue().getAssignmentType(symbolTable).equals(VarType.INT)){
-            throw new Exception("Error: los valores en " + this.getClass().getSimpleName() + " deben ser de tipo INT");
+            throw new Exception("Error en "+ methodName+ ": los valores en "  + this.getClass().getSimpleName() + " deben ser de tipo int");
         }
-        for(Component component: this.getComponents()){
-            component.checkType(symbolTable);
-        }
+        super.checkType(symbolTable, methodName);
     }
 
     @Override
@@ -73,11 +71,5 @@ public class For extends ComponentBlock {
         actual.checkSymbolTable(symbolTable);
         super.checkSymbolTable(symbolTable);
     }
-
-    @Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-        super.typeCheck(symbolTable, name);
-    }
-
 
 }
