@@ -12,7 +12,7 @@ import application.assignment.math.*;
 import application.variables.*;
 import application.condition.*;
 import application.component.*;
-import application.symbolTable.*;
+import application.symboltable.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -1476,7 +1476,7 @@ class CUP$parser$actions {
 		int cright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Set<VarStructure> c = (Set<VarStructure>)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        VarDeclaration decla = new VarDeclaration(DeclarationType.DECLARATION, i, VarType.LIST);
+        ListDeclaration decla = new ListDeclaration(DeclarationType.DECLARATION, i, v);
         if (c.contains(decla)) {
              throw new Exception("Variable ya declarada " + decla.getIdentifierName());
          }

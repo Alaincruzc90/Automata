@@ -11,7 +11,7 @@ define var
 func eratosthenes params int n return List
 {
 
-git  define var
+define var
   {
   // arreglo de booleanos de tamaño n y se inicializa en true
       Array boolean numeric_table size n;
@@ -21,22 +21,22 @@ git  define var
       char cf;
       index = 0;  // se reinicia en uno
       int i = 0;  // se define e inicializa un entero para el for dentro del while
- 
+      prime_numbers insert false;
+      index = cf;
   }
  
-  //for index to n increase 1  // se cambia a true a partir de índice 2
-  //{
-     // numeric_table pos index + 1 = false;
-  //}
+  for index to n increase 1  // se cambia a true a partir de índice 2
+  {
+      numeric_table pos index + 1 = false;
+  }
  
  
   while index < n    // recorre todo el arreglo
   {
         // si el número no ha sido marcado se agrega a la lista de números primos
-         //if numeric_table pos index + 1 equals true then
          if numeric_table pos index + 1 equals true then
          {
-                 //prime_numbers insert index + 1;
+                 prime_numbers insert false;
          }
  
           i = index;
