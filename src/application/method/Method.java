@@ -3,12 +3,11 @@ package application.method;
 import application.classobject.ClassObject;
 import application.component.Call;
 import application.component.Component;
-import application.enums.DeclarationType;
 import application.enums.MethodType;
-import application.symbolTable.ArraySymbols;
-import application.symbolTable.SymbolTable;
-import application.symbolTable.Symbols;
-import application.symbolTable.Variable;
+import application.symboltable.ArraySymbols;
+import application.symboltable.SymbolTable;
+import application.symboltable.Symbols;
+import application.symboltable.Variable;
 import application.variables.*;
 
 import java.util.*;
@@ -105,7 +104,7 @@ public class Method {
         this.father = father;
     }
 
-    public boolean checkParamsType(SymbolTable symbolTable){ //todo
+    public boolean checkParamsType(SymbolTable symboltable){ //todo
         List<Call> callList = new LinkedList<>();
         for(Component component: components){
             if(component instanceof Call){
@@ -138,7 +137,7 @@ public class Method {
         }
     }
 
-    public void fillLocalSymbols(SymbolTable symbolTable) throws Exception{
+    public void fillLocalSymbols(SymbolTable symboltable) throws Exception{
 
         List list = new ArrayList(parameters);
         Collections.reverse(list);
@@ -146,7 +145,7 @@ public class Method {
 
         for(VarStructure var : resultParameters) {
             if(var instanceof VarDeclaration) {
-                symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
+                symboltable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
             }
         }
 
@@ -156,13 +155,13 @@ public class Method {
 
         for(VarStructure var : resultLocals) {
             if(var instanceof VarDeclaration) {
-                symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
+                symboltable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclaration) var).getVarType()));
             } else if (var instanceof VarDeclarationAssignment) {
-                symbolTable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
+                symboltable.getLocalSymbols().add(new Variable(var.getIdentifierName(), ((VarDeclarationAssignment) var).getVarType()));
             } else if (var instanceof ArrayDeclaration) {
-                symbolTable.getLocalSymbols().add(new ArraySymbols(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
+                symboltable.getLocalSymbols().add(new ArraySymbols(var.getIdentifierName(), ((ArrayDeclaration) var).getVarType()));
             } else if (var instanceof VarAssignment) {
-                Symbols variable = symbolTable.lookupVariable(var.getIdentifierName());
+                Symbols variable = symboltable.lookupVariable(var.getIdentifierName());
                 if (variable == null) {
                     System.out.println("ERROR ----> La variable " + var.getIdentifierName() + " no ha sido declarada.");
                 }
@@ -175,7 +174,7 @@ public class Method {
 
         for(Component component : resultComponents) {
             try {
-                component.checkSymbolTable(symbolTable);
+                component.checkSymbolTable(symboltable);
             } catch (Exception e) {
                 throw new Exception("ERROR ----> En el método " + this.identifier + ": " + e.getMessage());
             }

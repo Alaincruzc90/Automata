@@ -2,7 +2,7 @@ package application.condition;
 
 import application.assignment.Assignment;
 import application.enums.ComparatorType;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 public class Condition {
 
@@ -40,8 +40,8 @@ public class Condition {
         this.comparatorType = comparatorType;
     }
     
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        if(leftEntry != null) leftEntry.checkSymbolTable(symbolTable);
-        if(rightEntry != null) rightEntry.checkSymbolTable(symbolTable);
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        if(leftEntry != null) leftEntry.checkSymbolTable(symboltable);
+        if(rightEntry != null) rightEntry.checkSymbolTable(symboltable);
     }
 }

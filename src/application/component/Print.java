@@ -4,7 +4,7 @@ import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 public class Print extends Component {
 
@@ -29,13 +29,13 @@ public class Print extends Component {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        text.checkSymbolTable(symbolTable);
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        text.checkSymbolTable(symboltable);
     }
 
     @Override
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
-        if(this.getText().getAssignmentType(symbolTable).equals(VarType.LIST)){
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception {
+        if(this.getText().getAssignmentType(symboltable).equals(VarType.LIST)){
             throw new Exception("Error en " + methodName + ": tipo de dato Lista no válido en Print");
         }
     }

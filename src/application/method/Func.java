@@ -5,7 +5,7 @@ import application.component.Component;
 import application.component.Return;
 import application.enums.MethodType;
 import application.enums.VarType;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 import application.variables.VarStructure;
 
 import java.util.List;
@@ -24,11 +24,11 @@ public class Func extends Method {
         return returnType;
     }
 
-    public boolean checkReturnValueType(SymbolTable symbolTable) throws Exception{
+    public boolean checkReturnValueType(SymbolTable symboltable) throws Exception{
         List<Component> list = this.getComponents();
         for(Component component: list) {
             if(component instanceof Return){
-                return ((Return) component).getValue().getAssignmentType(symbolTable).equals(this.getReturnType());
+                return ((Return) component).getValue().getAssignmentType(symboltable).equals(this.getReturnType());
             }
         }
         return false;

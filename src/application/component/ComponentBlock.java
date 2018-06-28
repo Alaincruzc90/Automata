@@ -1,10 +1,8 @@
 package application.component;
 
-import application.assignment.IdentifierAssignment;
 import application.enums.ComponentType;
-import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,16 +49,16 @@ public class ComponentBlock extends Component {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
         for(Component component: components) {
-            component.checkSymbolTable(symbolTable);
+            component.checkSymbolTable(symboltable);
         }
     }
 
     @Override
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception {
         for(Component component: components){
-            component.checkType(symbolTable, methodName);
+            component.checkType(symboltable, methodName);
         }
     }
 }

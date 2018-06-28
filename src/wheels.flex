@@ -41,14 +41,14 @@ import java_cup.runtime.*;
   scanner actions.  
 */
 %{   
-    /* To create a new java_cup.runtime.application.symbolTable.application.symbolTable.Symbols with information about
+    /* To create a new java_cup.runtime.application.symboltable.application.symboltable.Symbols with information about
        the current token, the token will have no value in this
        case. */
     private Symbol symbols(int type) {
         return new Symbol(type, yyline, yycolumn);
     }
     
-    /* Also creates a new java_cup.runtime.application.symbolTable.application.symbolTable.Symbols with information
+    /* Also creates a new java_cup.runtime.application.symboltable.application.symboltable.Symbols with information
        about the current token, but this object has a value. */
     private Symbol symbols(int type, Object value) {
         return new Symbol(type, yyline, yycolumn, value);

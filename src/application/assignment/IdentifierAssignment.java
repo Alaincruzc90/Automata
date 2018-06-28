@@ -1,7 +1,7 @@
 package application.assignment;
 
 import application.enums.VarType;
-import application.symbolTable.*;
+import application.symboltable.*;
 
 public class IdentifierAssignment implements Assignment {
 
@@ -20,19 +20,25 @@ public class IdentifierAssignment implements Assignment {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        if(symbolTable.lookupVariable(identifier) == null) {
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        if(symboltable.lookupVariable(identifier) == null) {
             throw new Exception("No se encontro la variable " + identifier);
         }
     }
 
     @Override
-    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
-        Symbols symbol = symbolTable.lookupVariable(this.getIdentifier());
-        if(symbol != null && symbol instanceof Variable) {
-            return ((Variable) symbol).getType();
-        } else{
-            symbol = symbolTable.lookupFunc(this.getIdentifier());
+    public VarType getAssignmentType(SymbolTable symboltable) throws Exception {
+        Symbols symbol = symboltable.lookupVariable(this.getIdentifier());
+        if(symbol != null){
+                if(symbol instanceof Variable){
+                    return ((Variable) symbol).getType();
+                } else if(symbol instanceof ListSymbols){
+                    return VarType.LIST;
+                } else if(symbol instanceof ArraySymbols){
+                    return VarType.ARRAY;
+                }
+        } else {
+            symbol = symboltable.lookupFunc(this.getIdentifier());
             if(symbol != null){
                 return ((Function) symbol).getReturnValueType();
             }

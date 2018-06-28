@@ -1,9 +1,7 @@
 package application.assignment;
 
 import application.enums.VarType;
-import application.symbolTable.SymbolTable;
-import application.symbolTable.Symbols;
-import application.symbolTable.Variable;
+import application.symboltable.SymbolTable;
 
 
 public class DirectAssignment<K> implements Assignment {
@@ -23,12 +21,12 @@ public class DirectAssignment<K> implements Assignment {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
         // Do nothing
     }
 
     @Override
-    public VarType getAssignmentType(SymbolTable symbolTable) {
+    public VarType getAssignmentType(SymbolTable symboltable) {
         String valueTypeStr = value.getClass().getSimpleName();
         if(valueTypeStr.equalsIgnoreCase("float")){
             return VarType.INT;

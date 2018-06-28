@@ -1,14 +1,13 @@
 package application.component;
 
-import application.assignment.ArrayAssignment;
 import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.ArraySymbols;
-import application.symbolTable.SymbolTable;
-import application.symbolTable.Symbols;
-import application.symbolTable.Variable;
+import application.symboltable.ArraySymbols;
+import application.symboltable.SymbolTable;
+import application.symboltable.Symbols;
+import application.symboltable.Variable;
 
 public class VarAssignmentComponent extends Component {
 
@@ -44,15 +43,15 @@ public class VarAssignmentComponent extends Component {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        if(symbolTable.lookupVariable(identifierName) == null) {
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        if(symboltable.lookupVariable(identifierName) == null) {
             throw new Exception("No se encontro la variable " + identifierName);
         }
     }
 
     @Override
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
-        Symbols symbol = symbolTable.lookupVariable(this.getIdentifierName());
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception {
+        Symbols symbol = symboltable.lookupVariable(this.getIdentifierName());
         if(symbol != null){
             VarType symbolVarType = null;
             if(symbol instanceof Variable){
@@ -60,8 +59,8 @@ public class VarAssignmentComponent extends Component {
             } else if(symbol instanceof ArraySymbols){
                 symbolVarType = ((ArraySymbols) symbol).getType();
             }
-            if(symbolVarType != null && this.getAssignment().getAssignmentType(symbolTable) != null){
-                if(!symbolVarType.equals(this.getAssignment().getAssignmentType(symbolTable))){
+            if(symbolVarType != null && this.getAssignment().getAssignmentType(symboltable) != null){
+                if(!symbolVarType.equals(this.getAssignment().getAssignmentType(symboltable))){
                     throw new Exception("Error en "+ methodName + ": el tipo de dato asignado es diferente al requerido en variable " + symbol.getName());
                 }
             }

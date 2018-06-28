@@ -2,9 +2,8 @@ package application.component;
 
 import application.assignment.IdentifierAssignment;
 import application.enums.ComponentType;
-import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 public class Read extends Component {
 
@@ -29,12 +28,12 @@ public class Read extends Component {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        identifier.checkSymbolTable(symbolTable);
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        identifier.checkSymbolTable(symboltable);
     }
 
     @Override
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception {
         //implementado usando metodos propios de la clase
     }
 }

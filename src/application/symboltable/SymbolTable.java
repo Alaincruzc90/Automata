@@ -1,4 +1,4 @@
-package application.symbolTable;
+package application.symboltable;
 
 import java.util.LinkedList;
 import java.util.List;

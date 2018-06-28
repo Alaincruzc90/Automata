@@ -2,7 +2,7 @@ package application.assignment;
 
 import application.component.Call;
 import application.enums.VarType;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 public class CallAssignment implements Assignment {
 
@@ -21,12 +21,12 @@ public class CallAssignment implements Assignment {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        call.checkSymbolTable(symbolTable);
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        call.checkSymbolTable(symboltable);
     }
 
     @Override
-    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
-        return call.getAssignmentType(symbolTable);
+    public VarType getAssignmentType(SymbolTable symboltable) throws Exception{
+        return call.getAssignmentType(symboltable);
     }
 }

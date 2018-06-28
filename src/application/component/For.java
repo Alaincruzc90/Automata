@@ -1,11 +1,10 @@
 package application.component;
 
 import application.assignment.Assignment;
-import application.assignment.IdentifierAssignment;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 import java.util.List;
 
@@ -53,23 +52,23 @@ public class For extends ComponentBlock {
         this.actual = actual;
     }
 
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception{
-        if(!this.getActual().getAssignmentType(symbolTable).equals(VarType.INT)){
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception{
+        if(!this.getActual().getAssignmentType(symboltable).equals(VarType.INT)){
             throw new Exception("Error en "+ methodName+ ": los valores en " + this.getClass().getSimpleName() + " deben ser de tipo int");
-        } else if(!this.getStripe().getAssignmentType(symbolTable).equals(VarType.INT)){
+        } else if(!this.getStripe().getAssignmentType(symboltable).equals(VarType.INT)){
             throw new Exception("Error en "+ methodName+ ": los valores en " + this.getClass().getSimpleName() + " deben ser de tipo int");
-        } else if(!this.getMaxValue().getAssignmentType(symbolTable).equals(VarType.INT)){
+        } else if(!this.getMaxValue().getAssignmentType(symboltable).equals(VarType.INT)){
             throw new Exception("Error en "+ methodName+ ": los valores en "  + this.getClass().getSimpleName() + " deben ser de tipo int");
         }
-        super.checkType(symbolTable, methodName);
+        super.checkType(symboltable, methodName);
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        maxValue.checkSymbolTable(symbolTable);
-        stripe.checkSymbolTable(symbolTable);
-        actual.checkSymbolTable(symbolTable);
-        super.checkSymbolTable(symbolTable);
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        maxValue.checkSymbolTable(symboltable);
+        stripe.checkSymbolTable(symboltable);
+        actual.checkSymbolTable(symboltable);
+        super.checkSymbolTable(symboltable);
     }
 
 }
