@@ -1,5 +1,6 @@
 package application.component;
 
+import application.assignment.ArrayAssignment;
 import application.assignment.Assignment;
 import application.enums.ComponentType;
 import application.enums.VarType;
@@ -56,12 +57,13 @@ public class VarAssignmentComponent extends Component {
             VarType symbolVarType = null;
             if(symbol instanceof Variable){
                 symbolVarType = ((Variable) symbol).getType();
-            }
-            if(symbol instanceof ArraySymbols){
+            } else if(symbol instanceof ArraySymbols){
                 symbolVarType = ((ArraySymbols) symbol).getType();
             }
-            if(symbolVarType != null && !symbolVarType.equals(this.getAssignment().getAssignmentType(symbolTable))){
-                throw new Exception("Error en "+ methodName + ": el tipo de dato asignado es diferente al requerido en variable " + symbol.getName());
+            if(symbolVarType != null && this.getAssignment().getAssignmentType(symbolTable) != null){
+                if(!symbolVarType.equals(this.getAssignment().getAssignmentType(symbolTable))){
+                    throw new Exception("Error en "+ methodName + ": el tipo de dato asignado es diferente al requerido en variable " + symbol.getName());
+                }
             }
         }
     }

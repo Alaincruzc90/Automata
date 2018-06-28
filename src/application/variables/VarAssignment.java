@@ -27,11 +27,6 @@ public class VarAssignment extends VarStructure implements Assignment {
         assignment.checkSymbolTable(symbolTable);
     }
 
-    /*@Override
-    public void typeCheck(SymbolTable symbolTable, String name) throws Exception {
-        this.assignment.typeCheck(symbolTable, name);
-    }*/
-
     @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
         return this.assignment.getAssignmentType(symbolTable);

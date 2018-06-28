@@ -44,14 +44,14 @@ import java_cup.runtime.*;
     /* To create a new java_cup.runtime.application.symbolTable.application.symbolTable.Symbols with information about
        the current token, the token will have no value in this
        case. */
-    private application.symbolTable.application.symbolTable.Symbols symbols(int type) {
-        return new application.symbolTable.application.symbolTable.Symbols(type, yyline, yycolumn);
+    private Symbol symbols(int type) {
+        return new Symbol(type, yyline, yycolumn);
     }
     
     /* Also creates a new java_cup.runtime.application.symbolTable.application.symbolTable.Symbols with information
        about the current token, but this object has a value. */
-    private application.symbolTable.application.symbolTable.Symbols symbols(int type, Object value) {
-        return new application.symbolTable.application.symbolTable.Symbols(type, yyline, yycolumn, value);
+    private Symbol symbols(int type, Object value) {
+        return new Symbol(type, yyline, yycolumn, value);
     }
 %}
 

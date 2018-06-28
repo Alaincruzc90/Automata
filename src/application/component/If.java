@@ -50,8 +50,6 @@ public class If extends ComponentBlock {
                 this.elseComponent.checkType(symbolTable, methodName);
             }
             super.checkType(symbolTable, methodName);
-        } else {
-            //throw new Exception("Error: valor no asignado en condicional " + this.getClass().getSimpleName());
         }
     }
 

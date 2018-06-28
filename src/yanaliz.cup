@@ -512,7 +512,7 @@ tof ::=		TRUE
 		;
 
 array_def ::=	ARRAY var_type:v IDENTIFIER:i SIZE math_expr:a EOL
-		{: RESULT = new ArrayDeclaration(DeclarationType.DECLARATION, i, VarType.ARRAY, a); :}
+		{: RESULT = new ArrayDeclaration(DeclarationType.DECLARATION, i, v, a); :}
 		;
 
 math_expr ::=	math_part:s SUM math_expr:v
@@ -528,6 +528,12 @@ math_expr ::=	math_part:s SUM math_expr:v
 math_part ::=	PARENTHESIS_LEFT math_expr:s PARENTHESIS_RIGHT
 		{: RESULT = new MathAux(); :}
 		|
+		TRUE
+        {: RESULT = new ValueAssignment<Boolean>(true); :}
+        |
+        FALSE
+        {: RESULT = new ValueAssignment<Boolean>(false); :}
+        |
 		term:s
 		{:
 		if(s instanceof IdentifierAssignment) {
@@ -631,8 +637,6 @@ term ::= num:s
 		|
 		IDENTIFIER:s
 		{: RESULT = new IdentifierAssignment(s.toString()); :}
-		|
-		tof
 		;
 
 var_type ::=	BOOLEAN 

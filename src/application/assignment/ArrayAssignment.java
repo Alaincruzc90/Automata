@@ -1,7 +1,9 @@
 package application.assignment;
 
 import application.enums.VarType;
+import application.symbolTable.ArraySymbols;
 import application.symbolTable.SymbolTable;
+import application.symbolTable.Symbols;
 
 public class ArrayAssignment implements Assignment {
 
@@ -48,6 +50,13 @@ public class ArrayAssignment implements Assignment {
 
     @Override
     public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
-        return value.getAssignmentType(symbolTable);
+        VarType arrayVarType = null;
+        Symbols symbol = symbolTable.lookupVariable(this.getIdentifier());
+        if(symbol != null && symbol instanceof ArraySymbols){
+            arrayVarType = ((ArraySymbols) symbol).getType();
+        } else {
+            arrayVarType = this.getValue().getAssignmentType(symbolTable);
+        }
+        return arrayVarType;
     }
 }

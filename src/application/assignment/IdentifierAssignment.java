@@ -33,7 +33,7 @@ public class IdentifierAssignment implements Assignment {
             return ((Variable) symbol).getType();
         } else{
             symbol = symbolTable.lookupFunc(this.getIdentifier());
-            if(symbol != null && symbol instanceof Function){
+            if(symbol != null){
                 return ((Function) symbol).getReturnValueType();
             }
         }

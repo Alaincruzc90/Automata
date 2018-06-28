@@ -35,14 +35,14 @@ public class SymbolTable {
 
     public Symbols lookupVariable(String identifier) {
         for(Symbols symbols : globalSymbols) {
-            if(symbols instanceof Variable || symbols instanceof ArraySymbols) {
+            if(symbols instanceof Variable || symbols instanceof ArraySymbols || symbols instanceof ListSymbols) {
                 if(symbols.getName().equals(identifier)) {
                     return symbols;
                 }
             }
         }
         for(Symbols symbols : localSymbols) {
-            if(symbols instanceof Variable || symbols instanceof ArraySymbols) {
+            if(symbols instanceof Variable || symbols instanceof ArraySymbols || symbols instanceof ListSymbols) {
                 if(symbols.getName().equals(identifier)) {
                     return symbols;
                 }
