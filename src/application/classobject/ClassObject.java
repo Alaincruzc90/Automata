@@ -247,7 +247,7 @@ public class ClassObject {
             //Vacía la tabla de símbolos local
             symbolTable.emptyLocalList();
         }
-        //+++++++++++++++++++++++
+
         print();
     }
 

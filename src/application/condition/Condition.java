@@ -39,7 +39,7 @@ public class Condition {
     public void setComparatorType(ComparatorType comparatorType) {
         this.comparatorType = comparatorType;
     }
-
+    
     public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
         if(leftEntry != null) leftEntry.checkSymbolTable(symbolTable);
         if(rightEntry != null) rightEntry.checkSymbolTable(symbolTable);

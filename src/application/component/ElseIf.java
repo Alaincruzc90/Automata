@@ -38,6 +38,5 @@ public class ElseIf extends ComponentBlock {
         } else {
             throw new Exception("Error: condicional sin asignar en " + this.getClass().getSimpleName());
         }
-
     }
 }

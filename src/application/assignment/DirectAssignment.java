@@ -30,22 +30,17 @@ public class DirectAssignment<K> implements Assignment {
     @Override
     public VarType getAssignmentType(SymbolTable symbolTable) {
         String valueTypeStr = value.getClass().getSimpleName();
-        if(!valueTypeStr.equalsIgnoreCase("float")){
+        if(valueTypeStr.equalsIgnoreCase("float")){
             return VarType.INT;
-        }
-        if(!valueTypeStr.equalsIgnoreCase("double")){
+        } else if(valueTypeStr.equalsIgnoreCase("double")){
             return VarType.DOUBLE;
-        }
-        if(!valueTypeStr.equalsIgnoreCase("string")){
+        } else if(valueTypeStr.equalsIgnoreCase("string")){
             return VarType.STRING;
-        }
-        if(!valueTypeStr.equalsIgnoreCase("array")) {
+        } else if(valueTypeStr.equalsIgnoreCase("array")) {
             return VarType.ARRAY;
-        }
-        if(!valueTypeStr.equalsIgnoreCase("list")){
+        } else if(valueTypeStr.equalsIgnoreCase("list")){
             return VarType.LIST;
-        }
-        if(!valueTypeStr.equalsIgnoreCase("boolean")){
+        } else if(valueTypeStr.equalsIgnoreCase("boolean")){
             return VarType.BOOLEAN;
         }
         return null;

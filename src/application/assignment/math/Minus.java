@@ -17,5 +17,4 @@ public class Minus extends MathOperation {
         return null;
     }
 
-
 }

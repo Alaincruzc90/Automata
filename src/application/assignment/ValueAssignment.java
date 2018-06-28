@@ -26,7 +26,6 @@ public class ValueAssignment<K> implements Assignment {
         // Do nothing
     }
 
-
     @Override
     public VarType getAssignmentType(SymbolTable symbolTable) {
         String valueTypeStr = value.getClass().getSimpleName();

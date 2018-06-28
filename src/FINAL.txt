@@ -10,8 +10,8 @@ define var
 // Criba de Eratóstenes 
 func eratosthenes params int n return List
 {
- 
-  define var 
+
+git  define var
   {
   // arreglo de booleanos de tamaño n y se inicializa en true
       Array boolean numeric_table size n;
