@@ -2,7 +2,7 @@ package application.component;
 
 import application.enums.ComponentType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class Else extends ComponentBlock {
         super(type, components);
     }
 
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception{
-        super.checkType(symbolTable, methodName);
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception{
+        super.checkType(symboltable, methodName);
     }
 }

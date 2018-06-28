@@ -3,7 +3,7 @@ package application.variables;
 import application.assignment.Assignment;
 import application.enums.DeclarationType;
 import application.enums.VarType;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 public class VarAssignment extends VarStructure implements Assignment {
 
@@ -23,12 +23,12 @@ public class VarAssignment extends VarStructure implements Assignment {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        assignment.checkSymbolTable(symbolTable);
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        assignment.checkSymbolTable(symboltable);
     }
 
     @Override
-    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception {
-        return this.assignment.getAssignmentType(symbolTable);
+    public VarType getAssignmentType(SymbolTable symboltable) throws Exception {
+        return this.assignment.getAssignmentType(symboltable);
     }
 }

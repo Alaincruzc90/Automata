@@ -2,9 +2,8 @@ package application.component;
 
 import application.condition.Condition;
 import application.enums.ComponentType;
-import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 import java.util.List;
 
@@ -41,23 +40,23 @@ public class If extends ComponentBlock {
         this.elseComponent = elseComponent;
     }
 
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception{
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception{
         if(this.condition.getLeftEntry() != null && this.condition.getRightEntry() != null){
-            if(!this.condition.getLeftEntry().getAssignmentType(symbolTable).equals(this.condition.getRightEntry().getAssignmentType(symbolTable))){
+            if(!this.condition.getLeftEntry().getAssignmentType(symboltable).equals(this.condition.getRightEntry().getAssignmentType(symboltable))){
                 throw new Exception("Error en "+ methodName + ": comparación de tipos diferentes en if");
             }
             if(this.elseComponent != null){
-                this.elseComponent.checkType(symbolTable, methodName);
+                this.elseComponent.checkType(symboltable, methodName);
             }
-            super.checkType(symbolTable, methodName);
+            super.checkType(symboltable, methodName);
         }
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        condition.checkSymbolTable(symbolTable);
-        super.checkSymbolTable(symbolTable);
-        if (elseComponent != null) elseComponent.checkSymbolTable(symbolTable);
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        condition.checkSymbolTable(symboltable);
+        super.checkSymbolTable(symboltable);
+        if (elseComponent != null) elseComponent.checkSymbolTable(symboltable);
     }
 
 }

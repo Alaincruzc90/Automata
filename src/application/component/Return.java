@@ -1,14 +1,12 @@
 package application.component;
 
 import application.assignment.*;
-import application.assignment.math.MathOperation;
 import application.enums.ComponentType;
 import application.enums.VarType;
-import application.method.Func;
 import application.method.Method;
-import application.symbolTable.Function;
-import application.symbolTable.SymbolTable;
-import application.symbolTable.Symbols;
+import application.symboltable.Function;
+import application.symboltable.SymbolTable;
+import application.symboltable.Symbols;
 
 public class Return extends Component implements Assignment {
 
@@ -33,27 +31,27 @@ public class Return extends Component implements Assignment {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        assignment.checkSymbolTable(symbolTable);
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        assignment.checkSymbolTable(symboltable);
     }
 
     @Override
-    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
-        return assignment.getAssignmentType(symbolTable);
+    public VarType getAssignmentType(SymbolTable symboltable) throws Exception{
+        return assignment.getAssignmentType(symboltable);
     }
 
     @Override
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
-        Symbols symbol = symbolTable.lookupFunc(methodName);
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception {
+        Symbols symbol = symboltable.lookupFunc(methodName);
         if(symbol != null) {
             VarType returnValueType = ((Function) symbol).getReturnValueType();
             if(returnValueType != null){
-                if(! returnValueType.equals(this.getValue().getAssignmentType(symbolTable))){
+                if(! returnValueType.equals(this.getValue().getAssignmentType(symboltable))){
                     throw new Exception("La función " + methodName + " tiene un tipo de retorno no válido");
                 }
             }
         } else {
-            symbol = symbolTable.lookupProc(methodName);
+            symbol = symboltable.lookupProc(methodName);
             if(symbol != null){
                 throw new Exception("Error: Return en procedimiento " + methodName);
             } else {

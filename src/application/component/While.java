@@ -3,7 +3,7 @@ package application.component;
 import application.condition.Condition;
 import application.enums.ComponentType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 import java.util.List;
 
@@ -29,12 +29,12 @@ public class While extends ComponentBlock {
         this.condition = condition;
     }
 
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception{
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception{
         if(this.condition.getLeftEntry() != null && this.condition.getRightEntry() != null) {
-            if (!this.condition.getLeftEntry().getAssignmentType(symbolTable).equals(this.condition.getRightEntry().getAssignmentType(symbolTable))) {
+            if (!this.condition.getLeftEntry().getAssignmentType(symboltable).equals(this.condition.getRightEntry().getAssignmentType(symboltable))) {
                 throw new Exception("Error en " + methodName +": comparación de tipos diferentes en " + this.getClass().getSimpleName());
             }
-            super.checkType(symbolTable, methodName);
+            super.checkType(symboltable, methodName);
         } else {
             throw new Exception("Error en "+ methodName + ": valor no asignado en condicional " + this.getClass().getSimpleName());
         }

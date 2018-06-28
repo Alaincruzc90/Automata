@@ -1,10 +1,8 @@
 package application.component;
 
-import application.assignment.Assignment;
 import application.enums.ComponentType;
-import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.SymbolTable;
+import application.symboltable.SymbolTable;
 
 public abstract class Component {
 
@@ -41,7 +39,7 @@ public abstract class Component {
         System.out.println(printSpaces+"Tipo de instrucción -> " + this.type);
     }
 
-    public abstract void checkSymbolTable(SymbolTable symbolTable) throws Exception;
+    public abstract void checkSymbolTable(SymbolTable symboltable) throws Exception;
 
-    public abstract void checkType(SymbolTable symbolTable, String methodName) throws Exception;
+    public abstract void checkType(SymbolTable symboltable, String methodName) throws Exception;
 }

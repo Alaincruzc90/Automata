@@ -4,7 +4,7 @@ import application.assignment.*;
 import application.enums.ComponentType;
 import application.enums.VarType;
 import application.method.Method;
-import application.symbolTable.*;
+import application.symboltable.*;
 import application.variables.VarStructure;
 
 import java.util.LinkedList;
@@ -44,11 +44,11 @@ public class Call extends Component implements Assignment {
         this.methodName = methodName;
     }
 
-    public VarType getAssignmentType(SymbolTable symbolTable) throws Exception{
-        return parameter.getAssignmentType(symbolTable);
+    public VarType getAssignmentType(SymbolTable symboltable) throws Exception{
+        return parameter.getAssignmentType(symboltable);
     }
 
-    public void checkParameterList(SymbolTable symbolTable, String methodName, Set<VarStructure> parameter) throws Exception{
+    public void checkParameterList(SymbolTable symboltable, String methodName, Set<VarStructure> parameter) throws Exception{
         if(parameter != null && parameter.size() > 0){
 
             List<VarStructure> paramList = new LinkedList<>();
@@ -56,9 +56,9 @@ public class Call extends Component implements Assignment {
                 paramList.add(var);
             }
 
-            Symbols symbol = symbolTable.lookupFunc(methodName);
+            Symbols symbol = symboltable.lookupFunc(methodName);
             if(symbol == null){
-                symbol = symbolTable.lookupProc(methodName);
+                symbol = symboltable.lookupProc(methodName);
             }
             if(symbol != null){
                 List<VarType> assignedParameterList = new LinkedList<>();
@@ -73,9 +73,9 @@ public class Call extends Component implements Assignment {
                 String name;
                 for(int i = 0; i < assignedParameterList.size(); i++){
                     name = paramList.get(i).getIdentifierName();
-                    symbol = symbolTable.lookupVariable(name);
+                    symbol = symboltable.lookupVariable(name);
                     if(symbol != null && symbol instanceof Variable){
-                        if(!((Variable) symbol).getType().equals(this.parameter.getAssignmentType(symbolTable))){
+                        if(!((Variable) symbol).getType().equals(this.parameter.getAssignmentType(symboltable))){
                             throw new Exception("Error en " + methodName + ": call llamado con parámetro no válido");
                         }
                     }
@@ -85,31 +85,31 @@ public class Call extends Component implements Assignment {
     }
 
     @Override
-    public void checkSymbolTable(SymbolTable symbolTable) throws Exception {
-        if(symbolTable.lookupFunc(this.methodName) == null && symbolTable.lookupProc(this.methodName) == null) {
+    public void checkSymbolTable(SymbolTable symboltable) throws Exception {
+        if(symboltable.lookupFunc(this.methodName) == null && symboltable.lookupProc(this.methodName) == null) {
             throw new Exception("No se encontro el método " + this.methodName + ".");
         }
         if(parameter != null) {
-            parameter.checkSymbolTable(symbolTable);
+            parameter.checkSymbolTable(symboltable);
         }
     }
 
     @Override
-    public void checkType(SymbolTable symbolTable, String methodName) throws Exception {
-        Symbols symbol = symbolTable.lookupFunc(methodName);
+    public void checkType(SymbolTable symboltable, String methodName) throws Exception {
+        Symbols symbol = symboltable.lookupFunc(methodName);
         if(symbol != null){
             List<VarType> parameters = ((Function) symbol).getVarTypes();
             if(parameters.size() == 1){
-                if( !parameters.get(0).equals(this.getParameter().getAssignmentType(symbolTable))){
+                if( !parameters.get(0).equals(this.getParameter().getAssignmentType(symboltable))){
                     throw new Exception("Error: parametro inválido en " + methodName);
                 }
             }
         } else {
-            symbol = symbolTable.lookupProc(methodName);
+            symbol = symboltable.lookupProc(methodName);
             if(symbol != null){
                 List<VarType> parameters = ((Procedure) symbol).getVarTypes();
                 if(parameters.size() == 1){
-                    if( !parameters.get(0).equals(this.getParameter().getAssignmentType(symbolTable))){
+                    if( !parameters.get(0).equals(this.getParameter().getAssignmentType(symboltable))){
                         throw new Exception("Error: parametro inválido en " + methodName);
                     }
                 }
