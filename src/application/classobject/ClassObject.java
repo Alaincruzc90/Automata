@@ -237,7 +237,7 @@ public class ClassObject {
             symboltable.emptyLocalList();
         }
 
-        print();
+        //print();
     }
 
 }
